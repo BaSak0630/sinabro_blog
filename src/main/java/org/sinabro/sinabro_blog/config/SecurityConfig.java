@@ -3,6 +3,8 @@ package org.sinabro.sinabro_blog.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -19,6 +21,11 @@ public class SecurityConfig {
     private PrincipalOauth2UserService principalOauth2UserService;
 
     @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
+    }
+
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
@@ -28,10 +35,11 @@ public class SecurityConfig {
                                 .requestMatchers("/admin/**").hasAnyRole("ADMIN")
                                 .anyRequest().permitAll()
                 ).formLogin(formLogin ->{
-                    formLogin.loginPage("/loginForm")
-                            .usernameParameter("username") //요처하는 파라메터가 달라지면 여기서 설정
+                    formLogin.loginPage("/login") // 웹 폼 로그인용
+                            .usernameParameter("accountId") //요처하는 파라메터가 달라지면 여기서 설정
                             .loginProcessingUrl("/login")// /login 주소가 호출이 되면 시큘리티가 대신 로그인 진행
                             .defaultSuccessUrl("/");
+
                 }).oauth2Login(oauth2Login ->{
                     oauth2Login.loginPage("/oauth2/authorization/google")//Tip. 코드X (엑세스 토큰 + 사용자 프로칠 정보 O)
                             .defaultSuccessUrl("/")
@@ -46,6 +54,9 @@ public class SecurityConfig {
                         .clearAuthentication(true)
                 );
 
+
         return http.build();
     }
+
 }
+

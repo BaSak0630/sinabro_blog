@@ -1,0 +1,55 @@
+= SiNaBro  API
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+
+= Account
+:sectnums:
+== 로그인
+- 요청
+include::{snippets}/login/http-request.adoc[]
+include::{snippets}/login/request-fields.adoc[]
+- 응답
+include::{snippets}/login/http-response.adoc[]
+
+== 회원가입
+- 요청
+include::{snippets}/signup/http-request.adoc[]
+include::{snippets}/signup/request-fields.adoc[]
+-응답
+include::{snippets}/signup/http-response.adoc[]
+
+== 아이디/비밀번호 찾기
+- 요청
+-응답
+
+= Post
+:sectnums:
+== 조회
+=== 단건
+- 요청
+include::{snippets}/post-inquiry/http-request.adoc[]
+include::{snippets}/post-inquiry/path-parameters.adoc[]
+- 응답
+include::{snippets}/post-inquiry/http-response.adoc[]
+include::{snippets}/post-inquiry/response-fields.adoc[]
+
+=== 다건
+- 요청
+include::{snippets}/post-search/http-request.adoc[]
+include::{snippets}/post-search/response-fields.adoc[]
+- 응답
+include::{snippets}/post-search/http-response.adoc[]
+include::{snippets}/post-search/response-fields.adoc[]
+
+== 작성
+=== 단건
+- 요청
+include::{snippets}/post-create/http-request.adoc[]
+include::{snippets}/post-create/request-fields.adoc[]
+- 응답
+include::{snippets}/post-create/http-response.adoc[]

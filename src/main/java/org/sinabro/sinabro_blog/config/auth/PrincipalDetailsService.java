@@ -30,12 +30,6 @@ public class PrincipalDetailsService implements UserDetailsService {
             Optional<Account> accountOptional = accountRepository.findByAccountId(username);
 
             if (accountOptional.isEmpty()) {
-                log.info("accountId로 찾지 못함, email로 재시도: {}", username);
-                // accountId로 찾지 못한 경우 email로 시도
-                accountRepository.findByEmail(username);
-            }
-
-            if (accountOptional.isEmpty()) {
                 log.warn("사용자를 찾을 수 없습니다: {}", username);
                 throw new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + username);
             }
@@ -55,7 +49,7 @@ public class PrincipalDetailsService implements UserDetailsService {
 
             return principalDetails;
 
-        } catch (Exception e) {
+        }catch (Exception e) {
             log.error("loadUserByUsername 처리 중 오류 발생: {}", e.getMessage(), e);
             throw new UsernameNotFoundException("사용자 정보 로드 중 오류 발생: " + username, e);
         }
