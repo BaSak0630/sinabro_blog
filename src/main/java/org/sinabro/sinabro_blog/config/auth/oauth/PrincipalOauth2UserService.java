@@ -2,6 +2,7 @@ package org.sinabro.sinabro_blog.config.auth.oauth;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.sinabro.sinabro_blog.user.domain.UserProfile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -42,6 +43,11 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         String password = passwordEncoder.encode(username);
         String email = oAuth2UserInfo.getEmail();
         Role role = Role.USER;
+        UserProfile profile =  UserProfile.builder()
+                .accountId(providerUserid)
+                .profileImageUrl(null)
+                .bio(null)
+                .build();
 
         // 이메일 기반으로 계정 확인 (더 안전한 방식)
         Optional<Account> existingAccount = accountService.findByEmail(email);
@@ -57,6 +63,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
                     .providerUserid(providerUserid)
                     .provider(provider)
                     .role(role)
+                    .profile(profile)
                     .createAt(LocalDateTime.now())
                     .updateAt(LocalDateTime.now())
                     .linkedAt(LocalDateTime.now())

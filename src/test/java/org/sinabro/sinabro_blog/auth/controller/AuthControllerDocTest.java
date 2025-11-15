@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@AutoConfigureRestDocs(uriScheme = "https",uriHost = "api.zisik.org",uriPort = 443)
+@AutoConfigureRestDocs(uriScheme = "https",uriHost = "api.sinabro.org",uriPort = 443)
 @ExtendWith(RestDocumentationExtension.class)
 class AuthControllerDocTest {
     @Autowired

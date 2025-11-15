@@ -17,7 +17,7 @@ public abstract class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
-    protected String accountId; // 로그인아이디
+    protected String accountId; // 로그인아이디  //OAuth -> providerUserid
     protected String password;
     protected String email;
     protected String username;
@@ -27,4 +27,6 @@ public abstract class Account {
     @JoinColumn(name = "user_profile_id")
     protected UserProfile profile;
     protected Role role;
+
+    public abstract void validate();
 }

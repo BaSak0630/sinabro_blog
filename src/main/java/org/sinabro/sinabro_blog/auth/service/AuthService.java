@@ -2,6 +2,7 @@ package org.sinabro.sinabro_blog.auth.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.sinabro.sinabro_blog.user.domain.UserProfile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.sinabro.sinabro_blog.auth.request.Login;
@@ -40,7 +41,13 @@ public class AuthService {
                 .createAt(LocalDateTime.now())
                 .updateAt(LocalDateTime.now())
                 .email(signup.getEmail())
-                .profile(null)
+                .profile(
+                        UserProfile.builder()
+                                .accountId(signup.getAccountId())
+                                .profileImageUrl(null)
+                                .bio(null)
+                                .build()
+                )
                 .role(Role.USER)
                 .build());
 

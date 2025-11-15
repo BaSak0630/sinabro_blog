@@ -10,11 +10,11 @@ public class InvalidRequest extends SinabroException {
 
     private static final String MESSAGE = "잘못된 요청입니다.";
     public InvalidRequest() {
-        super(MESSAGE);
+        super("[ERROR] " + MESSAGE);
     }
 
     public InvalidRequest(String fieldName,String message) {
-        super(MESSAGE);
+        super("[ERROR] " + MESSAGE);
         addValidation(fieldName,message);
     }
 

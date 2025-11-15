@@ -30,6 +30,7 @@ public class AccountService {
     }
 
     public void oauthJoin(OAuthAccount accountEntity) {
+        accountEntity.validate();
         accountRepository.save(accountEntity);
     }
 
@@ -43,6 +44,7 @@ public class AccountService {
     }
 
     public void join(LocalAccount accountEntity) {
+        accountEntity.validate();
         accountRepository.save(accountEntity);
     }
 }
