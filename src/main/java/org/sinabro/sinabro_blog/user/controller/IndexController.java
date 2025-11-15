@@ -11,6 +11,7 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -21,6 +22,7 @@ import org.sinabro.sinabro_blog.auth.service.AuthService;
 import org.sinabro.sinabro_blog.config.auth.PrincipalDetails;
 
 @Controller
+@CrossOrigin(origins = "http://localhost:8080")
 public class IndexController {
 
     @Autowired

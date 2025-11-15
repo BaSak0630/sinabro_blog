@@ -6,13 +6,11 @@ import lombok.RequiredArgsConstructor;
 import org.sinabro.sinabro_blog.post.request.CommentCreate;
 import org.sinabro.sinabro_blog.post.request.CommentDelete;
 import org.sinabro.sinabro_blog.post.service.CommentService;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:8080")
 public class CommentController {
 
     private final CommentService commentService;
