@@ -33,7 +33,7 @@ class AuthServiceTest {
 
         //given
         SignUp signup = SignUp.builder()
-                .accountId("test1")
+                .accountId("test1234")
                 .email("test1@gmail.com")
                 .password("pass1234")
                 .build();

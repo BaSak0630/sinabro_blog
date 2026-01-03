@@ -56,9 +56,9 @@ class AuthControllerDocTest {
     @DisplayName("로그인 테스트 테스트 ")
     public void loginTest() throws Exception {
         SignUp request = SignUp.builder()
-                .accountId("test123")
-                .password("password124")
-                .email("test123@naver.com")
+                .accountId("test123456")
+                .password("password1234")
+                .email("test123456@naver.com")
                 .username("김동혁")
                 .build();
 
@@ -70,8 +70,8 @@ class AuthControllerDocTest {
                 .content(json));
 
         Login request1 = Login.builder()
-                .accountId("test123")
-                .password("password124").build();
+                .accountId("test123456")
+                .password("password1234").build();
         String json1 = objectMapper.writeValueAsString(request1);
         //expected
         mockMvc.perform(post("/auth/login")
@@ -92,7 +92,7 @@ class AuthControllerDocTest {
     @DisplayName("회원 가입 테스트 테스트 ")
     public void signupTest() throws Exception {
         SignUp request = SignUp.builder()
-                .accountId("test123")
+                .accountId("test12356")
                 .password("password124")
                 .email("test123@naver.com")
                 .username("김동혁")

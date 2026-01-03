@@ -10,11 +10,11 @@ import java.lang.annotation.RetentionPolicy;
 @WithSecurityContext(factory = SinabroMockSecurityContext.class)
 public @interface SinabroMockUser {
 
-    String account() default "daile";
+    String account() default "daile1234";
 
-    String password() default "1234";
+    String password() default "password1234";
 
-    String email() default "daile@gmail.com";
+    String email() default "daile1234@gmail.com";
 
     String name() default "김동혁";
 

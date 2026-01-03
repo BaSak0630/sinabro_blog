@@ -69,10 +69,12 @@ public class PostControllerDocTest {
                 .title("제목")
                 .content("내용")
                 .build();
-        postRepository.save(post);
+        Post save = postRepository.save(post);
+        Long id = save.getId();
+
 
         //expected
-        mockMvc.perform(get("/posts/{postId}", 1L)
+        mockMvc.perform(get("/posts/{postId}", id)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())

@@ -22,7 +22,7 @@ public class CommentService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public void write(Long postId, CommentCreate request) {
+    public Long write(Long postId, CommentCreate request) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFound());
 
         String encryptedPassword = passwordEncoder.encode(request.getPassword());
@@ -33,6 +33,8 @@ public class CommentService {
                 .build();
 
         post.addComment(comment);
+
+        return comment.getId();
     }
 
     public void delete(Long commentId, CommentDelete request) {
