@@ -5,8 +5,11 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.sinabro.sinabro_blog.auth.domain.Session;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -28,5 +31,17 @@ public abstract class Account {
     protected UserProfile profile;
     protected Role role;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "account")
+    protected List<Session> sessions =  new ArrayList<>();
+
     public abstract void validate();
+
+    public String addSession() {
+        Session session = Session.builder()
+                .account(this)
+                .build();
+        sessions.add(session);
+
+        return session.getAccessToken();
+    }
 }

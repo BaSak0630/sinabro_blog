@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.sinabro.sinabro_blog.exception.AccountNotFound;
 import org.sinabro.sinabro_blog.exception.PostNotFound;
 import org.sinabro.sinabro_blog.post.domain.Post;
-import org.sinabro.sinabro_blog.post.domain.PostEditor;
+import org.sinabro.sinabro_blog.post.request.PostEditor;
 import org.sinabro.sinabro_blog.post.repository.PostRepository;
 import org.sinabro.sinabro_blog.post.request.PostCreate;
 import org.sinabro.sinabro_blog.post.request.PostEdit;

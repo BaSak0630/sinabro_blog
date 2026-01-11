@@ -7,6 +7,7 @@ import org.sinabro.sinabro_blog.auth.request.Login;
 import org.sinabro.sinabro_blog.auth.request.SignUp;
 import org.sinabro.sinabro_blog.auth.service.AuthService;
 import org.sinabro.sinabro_blog.config.AppConfig;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -36,6 +37,7 @@ public class AuthController {
 
     @PostMapping("/auth/login")
     public ResponseEntity<?> login(@RequestBody Login request) {
+        log.info("Login : {}", request);
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(

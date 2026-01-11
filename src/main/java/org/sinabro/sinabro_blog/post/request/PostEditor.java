@@ -1,4 +1,4 @@
-package org.sinabro.sinabro_blog.post.domain;
+package org.sinabro.sinabro_blog.post.request;
 
 import lombok.Getter;
 

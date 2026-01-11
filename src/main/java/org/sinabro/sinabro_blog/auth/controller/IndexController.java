@@ -1,8 +1,11 @@
-package org.sinabro.sinabro_blog.user.controller;
+package org.sinabro.sinabro_blog.auth.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
+import org.sinabro.sinabro_blog.auth.domain.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -11,16 +14,16 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.sinabro.sinabro_blog.auth.request.Login;
 import org.sinabro.sinabro_blog.auth.request.SignUp;
 import org.sinabro.sinabro_blog.auth.service.AuthService;
 import org.sinabro.sinabro_blog.config.auth.PrincipalDetails;
 
+import java.time.Duration;
+
+@Slf4j
 @Controller
 @CrossOrigin(origins = "http://localhost:8080")
 public class IndexController {
@@ -59,38 +62,52 @@ public class IndexController {
     }
 
     @GetMapping({"/admin"})
-    public @ResponseBody String admin() {
+    public @ResponseBody String admin(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        System.out.println("principal details = " + principalDetails.getAccount());
         return "admin";
     }
 
     @GetMapping({"/manager"})
-    public @ResponseBody String manager() {
+    public @ResponseBody String manager(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        System.out.println("principal details = " + principalDetails.getAccount());
         return "manager";
     }
 
     //SecurityConfig 파일 생성 후 기존 제공하는 login 작동 X
     @GetMapping({"/loginForm"})
     public String login() {
-        return "loginForm";
+        return "/loginForm";
     }
 
     @GetMapping({"/joinForm"})
     public String joinForm() {
-        return "joinForm";
+        return "/joinForm";
     }
 
     @PostMapping({"/join"})
     public @ResponseBody String join(SignUp signup) {
         System.out.println(signup);
         authService.signup(signup);
-        return "loginForm";
+        return "/loginForm";
     }
 
     @PostMapping("/login")
-    public @ResponseBody String login(Login login) {
+    public ResponseEntity<Object> login(@RequestBody Login login) {
         System.out.println(login);
-        authService.login(login);
-        return "/";
+        String accessToken = authService.login(login);
+
+        ResponseCookie cookie = ResponseCookie.from("SESSION", accessToken)
+                .domain("localhost") //TODO 서버환경에 따른 분리 필요
+                .path("/")
+                .httpOnly(true)
+                .maxAge(Duration.ofDays(30))
+                .sameSite("Strict")
+                .build();
+
+        log.info(">>>>> cookie = {} ", cookie.toString());
+
+        return ResponseEntity.ok()
+                .header("Set-Cookie", cookie.toString()).body(accessToken);
     }
 
     @PostMapping("/logout")

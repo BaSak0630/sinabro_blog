@@ -2,14 +2,14 @@ package org.sinabro.sinabro_blog.auth.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.sinabro.sinabro_blog.exception.InvalidSinginInformation;
 import org.sinabro.sinabro_blog.user.domain.UserProfile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.sinabro.sinabro_blog.auth.request.Login;
 import org.sinabro.sinabro_blog.auth.request.SignUp;
 import org.sinabro.sinabro_blog.exception.AlreadyExistsAccountException;
-import org.sinabro.sinabro_blog.exception.InvalidPassword;
-import org.sinabro.sinabro_blog.exception.UserNotFound;
 import org.sinabro.sinabro_blog.user.domain.Account;
 import org.sinabro.sinabro_blog.user.domain.LocalAccount;
 import org.sinabro.sinabro_blog.user.domain.Role;
@@ -18,6 +18,7 @@ import org.sinabro.sinabro_blog.user.service.AccountService;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -57,22 +58,20 @@ public class AuthService {
         System.out.println("signup password: " + signup.getPassword());
     }
 
-    public void login(Login login) {
+    public String login(Login login) {
         // 사용자 존재 확인
         Account account = accountService.findByAccountId(login.getAccountId())
-                .orElseThrow(() -> {
-                    System.out.printf("존재하지 않는 계정 - accountId: {}", login.getAccountId());
-                    return new UserNotFound();
-                });
+                .orElseThrow(InvalidSinginInformation::new);
 
         // 비밀번호 검증
         if (!passwordEncoder.matches(login.getPassword(), account.getPassword())) {
-            System.out.printf("비밀번호 불일치 - accountId: {}", login.getAccountId());
-            throw new InvalidPassword();
+            throw new InvalidSinginInformation();
         }
 
-        System.out.printf("수동 로그인 검증 성공 - accountId: {}, email: {}",
+        log.info("수동 로그인 검증 성공 - accountId: {}, email: {}",
                 account.getAccountId(), account.getEmail());
-        //return responsetn
+
+
+        return account.addSession();
     }
 }

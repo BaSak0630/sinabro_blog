@@ -1,6 +1,7 @@
 package org.sinabro.sinabro_blog.config.auth;
 
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,6 +21,7 @@ import java.util.Map;
 
 //Security Session -> Authentication -> UserDetails(PrincipalDetails)
 
+@Slf4j
 @Data
 public class PrincipalDetails implements UserDetails, OAuth2User {
 
@@ -29,7 +31,7 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
     // 로컬 로그인용 생성자
     public PrincipalDetails(Account account) {
         this.account = account;
-        System.out.printf("PrincipalDetails 생성 (로컬 로그인): accountId={}, email={}",
+        log.info("PrincipalDetails 생성 (로컬 로그인): accountId={}, email={}",
                 account != null ? account.getAccountId() : "null",
                 account != null ? account.getEmail() : "null");
     }
@@ -38,7 +40,7 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
     public PrincipalDetails(Account account, Map<String, Object> attributes) {
         this.account = account;
         this.attributes = attributes;
-        System.out.printf("PrincipalDetails 생성 (OAuth2 로그인): email={}",
+        log.info("PrincipalDetails 생성 (OAuth2 로그인): email={}",
                 account != null ? account.getEmail() : "null");
     }
 

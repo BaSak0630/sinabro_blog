@@ -2,15 +2,15 @@
 POST http://localhost:8080/auth/login
 Content-Type: application/x-www-form-urlencoded
 
-username=daile&password=1234&remember=1
+username=test1234&password=test1234&remember=1
 
 ### 로그인1
 POST http://localhost:8080/auth/login
 Content-Type: application/json
 
 {
-  "account": "daile",
-  "password": "1234"
+  "accountId": "test1234",
+  "password": "test1234"
 }
 
 
@@ -21,7 +21,7 @@ Content-Type: application/json
 {
   "username": "김동혁",
   "accountId": "test1234",
-  "password": "pass",
+  "password": "test1234",
   "email": "daile@gmail.com"
 }
 

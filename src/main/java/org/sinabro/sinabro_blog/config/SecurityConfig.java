@@ -35,7 +35,7 @@ public class SecurityConfig {
                                 .requestMatchers("/admin/**").hasAnyRole("ADMIN")
                                 .anyRequest().permitAll()
                 ).formLogin(formLogin ->{
-                    formLogin.loginPage("/login") // 웹 폼 로그인용
+                    formLogin.loginPage("/loginForm") // 웹 폼 로그인용
                             .usernameParameter("accountId") //요처하는 파라메터가 달라지면 여기서 설정
                             .loginProcessingUrl("/login")// /login 주소가 호출이 되면 시큘리티가 대신 로그인 진행
                             .defaultSuccessUrl("/");

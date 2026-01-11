@@ -54,6 +54,8 @@ public class PostController {
         //응답 클래스를 분리하세요(서비스 정책의 맞는)
     }
 
+    //TODO edit
+
     @GetMapping("/posts")
     public PagingResponse<PostResponse> getAll(@ModelAttribute PostSearch postSearch) {
         return postService.getList(postSearch);
