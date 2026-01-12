@@ -13,7 +13,6 @@ import org.sinabro.sinabro_blog.user.service.AccountService;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:8080")
 public class AccountController {
 
     private final AccountService accountService;

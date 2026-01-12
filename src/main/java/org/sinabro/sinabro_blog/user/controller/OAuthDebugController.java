@@ -14,7 +14,6 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:8080")
 public class OAuthDebugController {
 
     private final ClientRegistrationRepository clientRegistrationRepository;

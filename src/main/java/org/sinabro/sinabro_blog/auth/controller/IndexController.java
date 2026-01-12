@@ -25,7 +25,6 @@ import java.time.Duration;
 
 @Slf4j
 @Controller
-@CrossOrigin(origins = "http://localhost:8080")
 public class IndexController {
 
     @Autowired
