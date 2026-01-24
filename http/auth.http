@@ -33,3 +33,6 @@ GET http://localhost:8080/admin
 
 ### 메인페이지
 GET http://localhost:8080
+
+### me
+GET http://localhost:8080/users/me

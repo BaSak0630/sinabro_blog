@@ -35,7 +35,7 @@ function doLogin() {
         </el-form-item>
 
         <el-form-item label="비밀번호">
-          <el-input type="password" v-model="state.login.password"></el-input>
+          <el-input v-model="state.login.password" type="password"></el-input>
         </el-form-item>
 
         <el-form-item>

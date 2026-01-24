@@ -21,7 +21,4 @@ export default class CommentRepository {
     })
   }
 
-  public async updateComment(comment: Comment) {
-    return
-  }
 }

@@ -52,7 +52,7 @@ function write() {
 
         <div>
           <label for="password">비밀번호</label>
-          <el-input type="password" v-model="state.CommentWrite.password" placeholder="비밀번호"></el-input>
+          <el-input v-model="state.CommentWrite.password" type="password" placeholder="비밀번호"></el-input>
         </div>
       </div>
 

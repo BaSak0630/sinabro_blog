@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type UserProfile from '@/entity/user/UserProfile'
+import type HttpError from '@/http/HttpError'
 import ProfileRepository from '@/repository/ProfileRepository'
 import UserRepository from '@/repository/AccountRepository'
 import { ElMessage } from 'element-plus'
@@ -18,10 +19,18 @@ const state = reactive<StateType>({
 })
 
 onBeforeMount(() => {
-  USER_REPOSITORY.getProfile().then((profile) => {
-    PROFILE_REPOSITORY.setProfile(profile)
-    state.profile = profile
-  })
+  USER_REPOSITORY.getProfile()
+    .then((profile) => {
+      PROFILE_REPOSITORY.setProfile(profile)
+      state.profile = profile
+    })
+    .catch((e: HttpError) => {
+      // 401은 로그인 안 된 상태 - 에러 표시 안 함
+      if (e.getCode() !== '401') {
+        console.error('프로필 조회 실패:', e.getMessage())
+      }
+      // 로그인 안 된 상태로 유지 (profile = null)
+    })
 })
 
 function logout() {
@@ -37,15 +46,15 @@ function logout() {
       <router-link to="/">홈으로</router-link>
     </li>
 
-    <li class="menu" v-if="state.profile !== null">
+    <li v-if="state.profile !== null" class="menu">
       <router-link to="/write">글 작성</router-link>
     </li>
 
-    <li class="menu" v-if="state.profile === null">
+    <li v-if="state.profile === null" class="menu">
       <router-link to="/login">로그인</router-link>
     </li>
-    <li class="menu" v-else>
-      <a href="#" @click="logout()">({{ state.profile!.name }}) 로그아웃</a>
+    <li v-else class="menu">
+      <a href="#" @click="logout()">({{ state.profile!.accountId }}) 로그아웃</a>
     </li>
   </ul>
 </template>

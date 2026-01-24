@@ -3,9 +3,7 @@ package org.sinabro.sinabro_blog.auth.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
-import org.sinabro.sinabro_blog.auth.domain.Session;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -16,12 +14,9 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
-import org.sinabro.sinabro_blog.auth.request.Login;
 import org.sinabro.sinabro_blog.auth.request.SignUp;
 import org.sinabro.sinabro_blog.auth.service.AuthService;
 import org.sinabro.sinabro_blog.config.auth.PrincipalDetails;
-
-import java.time.Duration;
 
 @Slf4j
 @Controller
@@ -88,25 +83,6 @@ public class IndexController {
         System.out.println(signup);
         authService.signup(signup);
         return "/loginForm";
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<Object> login(@RequestBody Login login) {
-        System.out.println(login);
-        String accessToken = authService.login(login);
-
-        ResponseCookie cookie = ResponseCookie.from("SESSION", accessToken)
-                .domain("localhost") //TODO 서버환경에 따른 분리 필요
-                .path("/")
-                .httpOnly(true)
-                .maxAge(Duration.ofDays(30))
-                .sameSite("Strict")
-                .build();
-
-        log.info(">>>>> cookie = {} ", cookie.toString());
-
-        return ResponseEntity.ok()
-                .header("Set-Cookie", cookie.toString()).body(accessToken);
     }
 
     @PostMapping("/logout")

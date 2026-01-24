@@ -39,8 +39,8 @@ onMounted(() => {
 
     <div style="width: 100%; display: flex; justify-content: center">
       <el-pagination
-        :babelParse="true"
         v-model:current-page="state.postList.page"
+        :babel-parse="true"
         layout="prev, pager, next"
         :total="state.postList.totalCount"
         :default-page-size="3"

@@ -3,7 +3,7 @@ package org.sinabro.sinabro_blog.post.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.sinabro.sinabro_blog.config.auth.UserPrincipal;
+import org.sinabro.sinabro_blog.config.auth.PrincipalDetails;
 import org.sinabro.sinabro_blog.post.request.PostCreate;
 import org.sinabro.sinabro_blog.post.request.PostEdit;
 import org.sinabro.sinabro_blog.post.request.PostSearch;
@@ -38,9 +38,9 @@ public class PostController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     //@PreAuthorize("hasRole('ROLE_ADMIN') && #request.userId = '101'") //request dto을 넣어서 채킹할수 있다
     @PostMapping("/posts")
-    public void post(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody @Valid PostCreate request){
+    public void post(@AuthenticationPrincipal PrincipalDetails principalDetails, @RequestBody @Valid PostCreate request){
         //request.validate();
-        postService.write(userPrincipal.getUserId(),request);
+        postService.write(principalDetails.getAccount().getId(), request);
         //return postService.write(request);
     }
 

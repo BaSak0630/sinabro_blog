@@ -34,6 +34,7 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
         log.info("PrincipalDetails 생성 (로컬 로그인): accountId={}, email={}",
                 account != null ? account.getAccountId() : "null",
                 account != null ? account.getEmail() : "null");
+
     }
 
     // OAuth2 로그인용 생성자

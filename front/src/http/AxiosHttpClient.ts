@@ -22,7 +22,8 @@ export default class AxiosHttpClient {
         method: config.method,
         url: config.path,
         params: config.params,
-        data: config.body
+        data: config.body,
+        withCredentials: true
       })
       .then((response: AxiosResponse) => {
         return response.data

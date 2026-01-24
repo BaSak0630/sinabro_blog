@@ -3,11 +3,13 @@ package org.sinabro.sinabro_blog.auth.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.sinabro.sinabro_blog.auth.domain.Session;
+import org.sinabro.sinabro_blog.auth.repository.SessionRepository;
+import org.sinabro.sinabro_blog.auth.request.Login;
 import org.sinabro.sinabro_blog.exception.InvalidSinginInformation;
 import org.sinabro.sinabro_blog.user.domain.UserProfile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.sinabro.sinabro_blog.auth.request.Login;
 import org.sinabro.sinabro_blog.auth.request.SignUp;
 import org.sinabro.sinabro_blog.exception.AlreadyExistsAccountException;
 import org.sinabro.sinabro_blog.user.domain.Account;
@@ -25,6 +27,7 @@ public class AuthService {
 
     private final AccountService accountService;
     private final PasswordEncoder passwordEncoder;
+    private final SessionRepository sessionRepository;
 
     @Transactional
     public void signup(SignUp signup) {
@@ -71,7 +74,9 @@ public class AuthService {
         log.info("수동 로그인 검증 성공 - accountId: {}, email: {}",
                 account.getAccountId(), account.getEmail());
 
+        Session session = account.addSession();
+        sessionRepository.save(session);
 
-        return account.addSession();
+        return session.getAccessToken();
     }
 }

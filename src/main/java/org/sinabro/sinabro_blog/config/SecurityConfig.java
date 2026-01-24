@@ -8,7 +8,10 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.context.SecurityContextRepository;
 import org.sinabro.sinabro_blog.config.auth.oauth.PrincipalOauth2UserService;
 
 //구글 로그인이 완료된 뒤 후처리 필요 1.코드 받기(인증) 2. 액세스 토큰(권한)
@@ -26,8 +29,20 @@ public class SecurityConfig {
     }
 
     @Bean
+    public SecurityContextRepository securityContextRepository() {
+        return new HttpSessionSecurityContextRepository();
+    }
+
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
+                .securityContext(context -> context
+                        .securityContextRepository(securityContextRepository())
+                        .requireExplicitSave(false)
+                )
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                )
                 .authorizeHttpRequests(
                         authorizeRequests ->authorizeRequests
                                 .requestMatchers("/user/**").authenticated()

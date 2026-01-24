@@ -2,6 +2,7 @@ package org.sinabro.sinabro_blog.user.service;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.sinabro.sinabro_blog.exception.*;
 import org.sinabro.sinabro_blog.user.domain.Account;
@@ -12,6 +13,7 @@ import org.sinabro.sinabro_blog.user.response.AccountResponse;
 
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AccountService {
@@ -21,7 +23,10 @@ public class AccountService {
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(UserNotFound::new);
 
-        return new AccountResponse(account);
+        AccountResponse accountResponse = new AccountResponse(account);
+
+        log.info("accountResponse: {}", accountResponse);
+        return accountResponse;
     }
 
     public Optional<Account> findByUsername(String username) {

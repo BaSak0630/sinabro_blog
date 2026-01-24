@@ -36,12 +36,12 @@ public abstract class Account {
 
     public abstract void validate();
 
-    public String addSession() {
+    public Session addSession() {
         Session session = Session.builder()
                 .account(this)
                 .build();
         sessions.add(session);
 
-        return session.getAccessToken();
+        return session;
     }
 }
