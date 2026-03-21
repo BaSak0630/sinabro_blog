@@ -32,11 +32,12 @@ public class PostResponse {
     }
 
     @Builder
-    public PostResponse(Long id, String title, String content, List<Comment> comments) {
+    public PostResponse(Long id, String title, String content, List<Comment> comments,  String author) {
         this.id = id;
         this.title = title.substring(0, Math.min(title.length(), 10));
         this.content = content;
         this.regDate = LocalDateTime.now();
         this.comments = comments;
+        this.author = author;
     }
 }
