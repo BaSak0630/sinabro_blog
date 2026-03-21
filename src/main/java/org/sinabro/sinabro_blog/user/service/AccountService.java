@@ -9,6 +9,8 @@ import org.sinabro.sinabro_blog.user.domain.Account;
 import org.sinabro.sinabro_blog.user.domain.LocalAccount;
 import org.sinabro.sinabro_blog.user.domain.OAuthAccount;
 import org.sinabro.sinabro_blog.user.repository.AccountRepository;
+import org.sinabro.sinabro_blog.user.repository.LocalAccountRepository;
+import org.sinabro.sinabro_blog.user.repository.OAuthAccountRepository;
 import org.sinabro.sinabro_blog.user.response.AccountResponse;
 
 import java.util.Optional;
@@ -18,6 +20,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AccountService {
     private final AccountRepository accountRepository;
+    private final LocalAccountRepository localAccountRepository;
+    private final OAuthAccountRepository oAuthAccountRepository;
 
     public AccountResponse getUserProfile(Long accountId) {
         Account account = accountRepository.findById(accountId)
@@ -30,8 +34,9 @@ public class AccountService {
     }
 
     public Optional<Account> findByUsername(String username) {
-        Account account = accountRepository.findByUsername(username);
-        return Optional.ofNullable(account);
+        Optional<LocalAccount> local = localAccountRepository.findByAccountId(username);
+        if (local.isPresent()) return local.map(a -> a);
+        return Optional.empty();
     }
 
     public void oauthJoin(OAuthAccount accountEntity) {
@@ -40,16 +45,18 @@ public class AccountService {
     }
 
     public Optional<Account> findByEmail(String email) {
-        Account account = accountRepository.findByEmail(email);
-        return Optional.ofNullable(account);
+        Optional<LocalAccount> local = localAccountRepository.findByEmail(email);
+        if (local.isPresent()) return local.map(a -> a);
+        return oAuthAccountRepository.findByEmail(email).map(a -> a);
     }
 
     public Optional<Account> findByAccountId(@NotBlank(message = "아이디 입력해주세요") String accountId) {
-        return accountRepository.findByAccountId(accountId);
+        Optional<LocalAccount> local = localAccountRepository.findByAccountId(accountId);
+        if (local.isPresent()) return local.map(a -> a);
+        return oAuthAccountRepository.findByAccountId(accountId).map(a -> a);
     }
 
     public void join(LocalAccount accountEntity) {
-        accountEntity.validate();
         accountRepository.save(accountEntity);
     }
 }

@@ -1,5 +1,8 @@
 package org.sinabro.sinabro_blog.user.domain;
 
+import lombok.Getter;
+
+@Getter
 public enum Role {
     USER("USER"),
     ROLE_ADMIN("ADMIN"),
@@ -11,7 +14,4 @@ public enum Role {
         this.role = role;
     }
 
-    public String getRole() {
-        return role;
-    }
 }

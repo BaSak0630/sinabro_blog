@@ -1,5 +1,6 @@
 package org.sinabro.sinabro_blog.config;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,11 +15,8 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.sinabro.sinabro_blog.config.auth.oauth.PrincipalOauth2UserService;
 
-//구글 로그인이 완료된 뒤 후처리 필요 1.코드 받기(인증) 2. 액세스 토큰(권한)
-// 3.사용자 프로필 정보 가져오기 4-1.그 정보를 토대로 회원가입 진행 가능
-// 4-2. 구글에서 재공하는 정보 말고 우리 비즈니스에 맞는 정보를 추가 해줘야합니다.
 @Configuration
-@EnableWebSecurity //활성화 -> 스프링 시큐리티 필터가 스프링 필터 체인에 등록됨
+@EnableWebSecurity
 public class SecurityConfig {
     @Autowired
     private PrincipalOauth2UserService principalOauth2UserService;
@@ -43,20 +41,33 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 )
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            // API 요청은 401 반환, 웹 페이지 요청은 로그인 페이지로 리다이렉트
+                            String accept = request.getHeader("Accept");
+                            if (accept != null && accept.contains("application/json")) {
+                                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                                response.setContentType("application/json;charset=UTF-8");
+                                response.getWriter().write("{\"message\":\"인증이 필요합니다.\"}");
+                            } else {
+                                response.sendRedirect("/loginForm");
+                            }
+                        })
+                )
                 .authorizeHttpRequests(
-                        authorizeRequests ->authorizeRequests
+                        authorizeRequests -> authorizeRequests
                                 .requestMatchers("/user/**").authenticated()
+                                .requestMatchers("/users/me").authenticated()
                                 .requestMatchers("/manager/**").hasAnyRole("ADMIN", "MANAGER")
                                 .requestMatchers("/admin/**").hasAnyRole("ADMIN")
                                 .anyRequest().permitAll()
-                ).formLogin(formLogin ->{
-                    formLogin.loginPage("/loginForm") // 웹 폼 로그인용
-                            .usernameParameter("accountId") //요처하는 파라메터가 달라지면 여기서 설정
-                            .loginProcessingUrl("/login")// /login 주소가 호출이 되면 시큘리티가 대신 로그인 진행
+                ).formLogin(formLogin -> {
+                    formLogin.loginPage("/loginForm")
+                            .usernameParameter("accountId")
+                            .loginProcessingUrl("/login")
                             .defaultSuccessUrl("/");
-
-                }).oauth2Login(oauth2Login ->{
-                    oauth2Login.loginPage("/oauth2/authorization/google")//Tip. 코드X (엑세스 토큰 + 사용자 프로칠 정보 O)
+                }).oauth2Login(oauth2Login -> {
+                    oauth2Login.loginPage("/oauth2/authorization/google")
                             .defaultSuccessUrl("/")
                             .failureUrl("/oauth2/authorization/google")
                             .userInfoEndpoint(userInfoEndpoint ->
@@ -69,9 +80,7 @@ public class SecurityConfig {
                         .clearAuthentication(true)
                 );
 
-
         return http.build();
     }
-
 }
 

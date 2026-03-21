@@ -5,6 +5,7 @@ export default class Post {
   public id = 0
   public title = ''
   public content = ''
+  public author = ''
   public comments = []
 
   @Transform(({ value }) => LocalDateTime.parse(value, DateTimeFormatter.ISO_LOCAL_DATE_TIME))

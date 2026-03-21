@@ -1,4 +1,4 @@
 export default class Login {
-  public account = ''
+  public accountId = ''
   public password = ''
 }

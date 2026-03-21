@@ -5,11 +5,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.sinabro.sinabro_blog.auth.domain.Session;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Entity
@@ -26,22 +23,9 @@ public abstract class Account {
     protected String username;
     protected LocalDateTime createAt;
     protected LocalDateTime updateAt;
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_profile_id")
+    @OneToOne(cascade = CascadeType.ALL)
     protected UserProfile profile;
     protected Role role;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "account")
-    protected List<Session> sessions =  new ArrayList<>();
-
     public abstract void validate();
-
-    public Session addSession() {
-        Session session = Session.builder()
-                .account(this)
-                .build();
-        sessions.add(session);
-
-        return session;
-    }
 }

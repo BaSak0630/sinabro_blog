@@ -19,6 +19,8 @@ public class PostResponse {
     private final String content;
     private final LocalDateTime regDate;
     private final List<Comment> comments;
+    private final String author;
+
     //생성자 오버로딩
     public PostResponse(Post post) {
         this.id = post.getId();
@@ -26,6 +28,7 @@ public class PostResponse {
         this.content = post.getContent();
         this.regDate = post.getRegDate();
         this.comments = post.getComments();
+        this.author = post.getAccount().getAccountId();
     }
 
     @Builder

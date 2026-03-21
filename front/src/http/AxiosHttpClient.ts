@@ -13,7 +13,11 @@ export type HttpRequestConfig = {
 export default class AxiosHttpClient {
   private readonly client: AxiosInstance = axios.create({
     timeout: 3000,
-    timeoutErrorMessage: '요청 시간이 초과되었습니다. '
+    timeoutErrorMessage: '요청 시간이 초과되었습니다.',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
   })
 
   public async request(config: HttpRequestConfig) {

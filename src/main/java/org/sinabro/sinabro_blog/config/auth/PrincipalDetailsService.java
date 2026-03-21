@@ -6,8 +6,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.sinabro.sinabro_blog.config.auth.PrincipalDetails;
 import org.sinabro.sinabro_blog.user.domain.Account;
-import org.sinabro.sinabro_blog.user.repository.AccountRepository;
+import org.sinabro.sinabro_blog.user.repository.LocalAccountRepository;
 
 import java.util.Optional;
 
@@ -19,20 +20,20 @@ import java.util.Optional;
 @Service
 public class PrincipalDetailsService implements UserDetailsService {
     @Autowired
-    private AccountRepository accountRepository;
+    private LocalAccountRepository localAccountRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("로컬 로그인 시도: {}", username);
 
         try {
-            // accountId로 계정 찾기
-            Optional<Account> accountOptional = accountRepository.findByAccountId(username);
+            Optional<Account> accountOptional = localAccountRepository.findByAccountId(username)
+                    .map(a -> (Account) a);
 
             if (accountOptional.isEmpty()) {
                 log.info("accountId로 찾지 못함, email로 재시도: {}", username);
-                // accountId로 찾지 못한 경우 email로 시도
-                accountRepository.findByEmail(username);
+                accountOptional = localAccountRepository.findByEmail(username)
+                        .map(a -> (Account) a);
             }
 
             if (accountOptional.isEmpty()) {
