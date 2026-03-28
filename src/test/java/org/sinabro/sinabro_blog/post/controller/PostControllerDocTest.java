@@ -9,7 +9,7 @@ import org.sinabro.sinabro_blog.annotation.SinabroMockUser;
 import org.sinabro.sinabro_blog.post.domain.Post;
 import org.sinabro.sinabro_blog.post.repository.PostRepository;
 import org.sinabro.sinabro_blog.post.request.PostCreate;
-import org.sinabro.sinabro_blog.user.repository.AccountRepository;
+import org.sinabro.commonness.user.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;

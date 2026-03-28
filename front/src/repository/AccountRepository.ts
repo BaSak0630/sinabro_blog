@@ -3,6 +3,7 @@ import type Login from '@/entity/user/Login'
 import type SignUp from '@/entity/user/SignUp'
 import { inject, singleton } from 'tsyringe'
 import UserProfile from '@/entity/user/UserProfile'
+import PublicProfile from '@/entity/user/PublicProfile'
 
 @singleton()
 export default class AccountRepository {
@@ -35,5 +36,12 @@ export default class AccountRepository {
     return this.httpRepository.post({
       path: '/api/oauth2/authorization/google',
     })
+  }
+
+  public getPublicProfile(accountId: string) {
+    return this.httpRepository.get<PublicProfile>(
+      { path: `/api/users/${accountId}` },
+      PublicProfile
+    )
   }
 }

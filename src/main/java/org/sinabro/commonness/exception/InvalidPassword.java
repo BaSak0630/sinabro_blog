@@ -1,0 +1,14 @@
+package org.sinabro.commonness.exception;
+
+public class InvalidPassword extends SinabroException {
+    private static final String MESSAGE = "비밀번호가 올바르지 않습니다.";
+
+    public InvalidPassword() {
+        super("[ERROR] " + MESSAGE);
+    }
+
+    @Override
+    public int statusCode() {
+        return 400;
+    }
+}

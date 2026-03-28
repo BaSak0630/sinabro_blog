@@ -3,8 +3,8 @@ package org.sinabro.sinabro_blog.post.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.sinabro.sinabro_blog.exception.AccountNotFound;
-import org.sinabro.sinabro_blog.exception.PostNotFound;
+import org.sinabro.commonness.exception.AccountNotFound;
+import org.sinabro.commonness.exception.PostNotFound;
 import org.sinabro.sinabro_blog.post.domain.Post;
 import org.sinabro.sinabro_blog.post.request.PostEditor;
 import org.sinabro.sinabro_blog.post.repository.PostRepository;
@@ -13,7 +13,7 @@ import org.sinabro.sinabro_blog.post.request.PostEdit;
 import org.sinabro.sinabro_blog.post.request.PostSearch;
 import org.sinabro.sinabro_blog.post.response.PagingResponse;
 import org.sinabro.sinabro_blog.post.response.PostResponse;
-import org.sinabro.sinabro_blog.user.repository.AccountRepository;
+import org.sinabro.commonness.user.repository.AccountRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
@@ -41,13 +41,7 @@ public class PostService {
     public PostResponse get(Long id) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new PostNotFound());
-        //List<Comment> comments = post.getComments();
-        return PostResponse.builder()
-                .id(post.getId())
-                .title(post.getTitle())
-                .content(post.getContent())
-                .comments(post.getComments())
-                .build();
+        return new PostResponse(post);
         /*
         * PostController -> WebPostService -> Repository
         *                   PostService

@@ -3,7 +3,7 @@ package org.sinabro.sinabro_blog.post.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.sinabro.sinabro_blog.config.auth.PrincipalDetails;
+import org.sinabro.commonness.config.auth.PrincipalDetails;
 import org.sinabro.sinabro_blog.post.request.PostCreate;
 import org.sinabro.sinabro_blog.post.request.PostEdit;
 import org.sinabro.sinabro_blog.post.request.PostSearch;

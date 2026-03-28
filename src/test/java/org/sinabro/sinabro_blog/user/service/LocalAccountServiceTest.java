@@ -4,9 +4,10 @@ import jakarta.validation.ValidationException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.sinabro.sinabro_blog.user.domain.Account;
-import org.sinabro.sinabro_blog.user.domain.LocalAccount;
-import org.sinabro.sinabro_blog.user.repository.AccountRepository;
+import org.sinabro.commonness.user.domain.Account;
+import org.sinabro.commonness.user.domain.LocalAccount;
+import org.sinabro.commonness.user.repository.AccountRepository;
+import org.sinabro.commonness.user.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 

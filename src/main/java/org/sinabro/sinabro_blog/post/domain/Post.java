@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.sinabro.sinabro_blog.post.request.PostEditor;
-import org.sinabro.sinabro_blog.user.domain.Account;
+import org.sinabro.commonness.user.domain.Account;
 
 import java.time.LocalDateTime;
 import java.util.List;

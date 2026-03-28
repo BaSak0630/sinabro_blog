@@ -1,6 +1,7 @@
 import React from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import BlogLayout from '@/layouts/BlogLayout'
+import FinTreeLayout from '@/layouts/FinTreeLayout'
 import RequireAdmin from '@/components/RequireAdmin'
 import MainView from '@/views/MainView'
 import LoginView from '@/views/LoginView'
@@ -8,6 +9,9 @@ import HomeView from '@/views/HomeView'
 import WriteView from '@/views/WriteView'
 import ReadView from '@/views/ReadView'
 import EditView from '@/views/EditView'
+import ProfileView from '@/views/ProfileView'
+import FinTreeHomeView from '@/views/FinTreeHomeView'
+import FinTreeNodeView from '@/views/FinTreeNodeView'
 
 export default function App() {
   return (
@@ -25,10 +29,14 @@ export default function App() {
           <Route path="write" element={<RequireAdmin><WriteView /></RequireAdmin>} />
           <Route path="post/:postId" element={<ReadView />} />
           <Route path="edit/:postId" element={<RequireAdmin><EditView /></RequireAdmin>} />
+          <Route path="profile/:accountId" element={<ProfileView />} />
         </Route>
 
-        {/* FinTree - 추후 개발 */}
-        {/* <Route path="/finance" element={<FinTreeLayout />}> ... </Route> */}
+        {/* FinTree */}
+        <Route path="/fintree" element={<FinTreeLayout />}>
+          <Route index element={<FinTreeHomeView />} />
+          <Route path="nodes/:nodeId" element={<FinTreeNodeView />} />
+        </Route>
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

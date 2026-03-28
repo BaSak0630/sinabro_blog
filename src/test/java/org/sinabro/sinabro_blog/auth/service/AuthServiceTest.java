@@ -3,13 +3,13 @@ package org.sinabro.sinabro_blog.auth.service;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.sinabro.sinabro_blog.auth.request.SignUp;
-import org.sinabro.sinabro_blog.user.repository.AccountRepository;
+import org.sinabro.commonness.auth.request.SignUp;
+import org.sinabro.commonness.auth.service.AuthService;
+import org.sinabro.commonness.user.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class AuthServiceTest {

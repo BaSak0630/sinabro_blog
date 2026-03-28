@@ -22,6 +22,8 @@ public class PostSearch {
     @Builder.Default
     private Integer size = 10;
 
+    private String author;
+
     public void setPage(Integer page) {
         this.page = page <= 0 ? 1 : min(page, MAX_PAGE);
     }

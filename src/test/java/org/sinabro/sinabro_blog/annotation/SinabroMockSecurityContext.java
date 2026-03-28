@@ -1,9 +1,9 @@
 package org.sinabro.sinabro_blog.annotation;
 
 import lombok.RequiredArgsConstructor;
-import org.sinabro.sinabro_blog.config.auth.UserPrincipal;
-import org.sinabro.sinabro_blog.user.domain.LocalAccount;
-import org.sinabro.sinabro_blog.user.repository.AccountRepository;
+import org.sinabro.commonness.config.auth.UserPrincipal;
+import org.sinabro.commonness.user.domain.LocalAccount;
+import org.sinabro.commonness.user.repository.AccountRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;

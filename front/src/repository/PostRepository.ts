@@ -28,6 +28,15 @@ export default class PostRepository {
     )
   }
 
+  public getListByAuthor(author: string, page: number) {
+    return this.httpRepository.getList<Post>(
+      {
+        path: `/api/posts?author=${encodeURIComponent(author)}&page=${page}&size=10`
+      },
+      Post
+    )
+  }
+
   public delete(postId: number) {
     return this.httpRepository.delete({
       path: `/api/posts/${postId}`

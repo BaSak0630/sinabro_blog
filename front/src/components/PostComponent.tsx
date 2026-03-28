@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import type Post from '@/entity/post/Post'
 
 interface Props {
@@ -7,6 +7,7 @@ interface Props {
 }
 
 export default function PostComponent({ post }: Props) {
+  const navigate = useNavigate()
   const excerpt = post.content.replace(/[#*`>_\-!\[\]]/g, '').substring(0, 120)
 
   return (
@@ -16,10 +17,19 @@ export default function PostComponent({ post }: Props) {
     >
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1 min-w-0">
-          <p className="text-xs text-slate-400 mb-2">
+          <p className="text-xs text-slate-400 mb-2 flex items-center gap-1.5">
             {post.getDisplaySimpleRegDate()}
-            {post.author && <span className="ml-2 text-slate-300">·</span>}
-            {post.author && <span className="ml-2">{post.author}</span>}
+            {post.author && (
+              <>
+                <span className="text-slate-300">·</span>
+                <button
+                  className="hover:text-blue-500 transition-colors"
+                  onClick={(e) => { e.preventDefault(); navigate(`/blog/profile/${post.author}`) }}
+                >
+                  {post.author}
+                </button>
+              </>
+            )}
           </p>
           <h2 className="text-lg font-semibold text-slate-800 group-hover:text-blue-600 transition-colors truncate">
             {post.title}

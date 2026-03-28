@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
-import org.sinabro.sinabro_blog.exception.InvalidRequest;
+import org.sinabro.commonness.exception.InvalidRequest;
 
 @ToString
 @Getter

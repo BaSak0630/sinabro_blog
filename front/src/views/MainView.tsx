@@ -30,8 +30,8 @@ const SERVICES: ServiceCard[] = [
     name: 'FinTree',
     description: '금융 지식을 체계적으로 배우는 튜토리얼 서비스',
     tag: 'FINANCE',
-    path: '/finance',
-    available: false,
+    path: '/fintree',
+    available: true,
     color: 'from-emerald-500 to-teal-600',
   },
 ]

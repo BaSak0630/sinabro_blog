@@ -2,9 +2,9 @@ package org.sinabro.sinabro_blog.post.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.sinabro.sinabro_blog.exception.CommentNotFound;
-import org.sinabro.sinabro_blog.exception.InvalidPassword;
-import org.sinabro.sinabro_blog.exception.PostNotFound;
+import org.sinabro.commonness.exception.CommentNotFound;
+import org.sinabro.commonness.exception.InvalidPassword;
+import org.sinabro.commonness.exception.PostNotFound;
 import org.sinabro.sinabro_blog.post.domain.Comment;
 import org.sinabro.sinabro_blog.post.domain.Post;
 import org.sinabro.sinabro_blog.post.repository.CommentRepository;

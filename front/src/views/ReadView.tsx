@@ -68,9 +68,19 @@ export default function ReadView() {
           <h1 className="text-3xl font-bold text-slate-800 tracking-tight leading-tight">
             {post.title}
           </h1>
-          <p className="text-xs text-slate-400 mt-3">
+          <p className="text-xs text-slate-400 mt-3 flex items-center gap-2">
             {post.getDisplayRegDate()}
-            {post.author && <span className="ml-3 font-medium text-slate-500">{post.author}</span>}
+            {post.author && (
+              <>
+                <span className="text-slate-300">·</span>
+                <button
+                  className="font-medium text-slate-500 hover:text-blue-600 transition-colors"
+                  onClick={() => navigate(`/blog/profile/${post.author}`)}
+                >
+                  {post.author}
+                </button>
+              </>
+            )}
           </p>
         </header>
 

@@ -66,12 +66,18 @@ export default function BlogNav() {
               로그인
             </Link>
           ) : (
-            <button
-              onClick={logout}
-              className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-slate-700 transition-colors"
-            >
-              <span className="text-slate-600 font-medium">{profile.accountId}</span> · 로그아웃
-            </button>
+            <div className="flex items-center gap-1.5 text-xs text-slate-400">
+              <button
+                onClick={() => navigate(`/blog/profile/${profile.accountId}`)}
+                className="text-slate-600 font-medium hover:text-blue-600 transition-colors"
+              >
+                {profile.accountId}
+              </button>
+              <span>·</span>
+              <button onClick={logout} className="hover:text-slate-700 transition-colors">
+                로그아웃
+              </button>
+            </div>
           )}
         </nav>
       </div>
