@@ -57,6 +57,10 @@ export default function BlogNav() {
             <Link to="/blog/write" className="hover:text-slate-800 transition-colors">글 작성</Link>
           )}
 
+          {profile?.isAdmin() && (
+            <Link to="/admin" className="hover:text-slate-800 transition-colors">관리자</Link>
+          )}
+
           {profile === null ? (
             <Link
               to="/login"

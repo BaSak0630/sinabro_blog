@@ -35,7 +35,7 @@ class LocalAccountServiceTest {
     public void localAccountJoinTest() throws Exception {
         //given
         LocalAccount localAccount = LocalAccount.builder()
-                .accountId("testUser")
+                .accountId("testUser1")
                 .email("test@example.com")
                 .password("password123")
                 .username("testerName1")
@@ -66,9 +66,7 @@ class LocalAccountServiceTest {
                 .build();
 
         //expect
-        ValidationException e = assertThrows(ValidationException.class, () -> {
-            accountService.join(localAccount);
-        });
+        ValidationException e = assertThrows(ValidationException.class, localAccount::validate);
         assertThat(e.getMessage()).isEqualTo("아이디는 필수입니다.");
     }
 
@@ -84,9 +82,7 @@ class LocalAccountServiceTest {
                 .build();
 
         //expect
-        ValidationException e = assertThrows(ValidationException.class, () -> {
-            accountService.join(localAccount);
-        });
+        ValidationException e = assertThrows(ValidationException.class, localAccount::validate);
         assertThat(e.getMessage()).isEqualTo("아이디는 최소 8자 이상이어야 합니다.");
     }
 
@@ -102,13 +98,10 @@ class LocalAccountServiceTest {
                 .build();
 
         //expect
-        ValidationException e = assertThrows(ValidationException.class, () -> {
-            accountService.join(localAccount);
-        });
+        ValidationException e = assertThrows(ValidationException.class, localAccount::validate);
         assertThat(e.getMessage()).isEqualTo("아이디는 최대 20자 이하이어야 합니다.");
     }
 
-    //email
     @Test
     @DisplayName("로컬 계정 저장 실패 테스트 - email @ ")
     public void localAccountJoinEmailTest() throws Exception {
@@ -121,16 +114,12 @@ class LocalAccountServiceTest {
                 .build();
 
         //expect
-        ValidationException e = assertThrows(ValidationException.class, () -> {
-            accountService.join(localAccount);
-        });
+        ValidationException e = assertThrows(ValidationException.class, localAccount::validate);
         assertThat(e.getMessage()).isEqualTo("유효하지 않은 이메일입니다.");
     }
 
-    //password
-        //min
     @Test
-    @DisplayName("로컬 계정 저장 실패 테스트 - email min length")
+    @DisplayName("로컬 계정 저장 실패 테스트 - password min length")
     public void localAccountJoinPasswordMinTest() throws Exception {
         //given
         LocalAccount localAccount = LocalAccount.builder()
@@ -141,27 +130,23 @@ class LocalAccountServiceTest {
                 .build();
 
         //expect
-        ValidationException e = assertThrows(ValidationException.class, () -> {
-            accountService.join(localAccount);
-        });
+        ValidationException e = assertThrows(ValidationException.class, localAccount::validate);
         assertThat(e.getMessage()).isEqualTo("비밀번호는 최소 8자 이상이어야 합니다.");
     }
-        //max
-        @Test
-        @DisplayName("로컬 계정 저장 실패 테스트 - email max length")
-        public void localAccountJoinPasswordMaxTest() throws Exception {
-            //given
-            LocalAccount localAccount = LocalAccount.builder()
-                    .accountId("test1234")
-                    .email("test1234@exampl.com")
-                    .password("passddkfjdkfjsklfj2dkfjdkfjdflks")
-                    .username("testerName1")
-                    .build();
 
-            //expect
-            ValidationException e = assertThrows(ValidationException.class, () -> {
-                accountService.join(localAccount);
-            });
-            assertThat(e.getMessage()).isEqualTo("비밀번호는 최대 20자 이하이어야 합니다.");
-        }
+    @Test
+    @DisplayName("로컬 계정 저장 실패 테스트 - password max length")
+    public void localAccountJoinPasswordMaxTest() throws Exception {
+        //given
+        LocalAccount localAccount = LocalAccount.builder()
+                .accountId("test1234")
+                .email("test1234@exampl.com")
+                .password("passddkfjdkfjsklfj2dkfjdkfjdflks")
+                .username("testerName1")
+                .build();
+
+        //expect
+        ValidationException e = assertThrows(ValidationException.class, localAccount::validate);
+        assertThat(e.getMessage()).isEqualTo("비밀번호는 최대 20자 이하이어야 합니다.");
+    }
 }

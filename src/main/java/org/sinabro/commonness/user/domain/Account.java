@@ -28,4 +28,8 @@ public abstract class Account {
     protected Role role;
 
     public abstract void validate();
+
+    public void changeRole(Role role) {
+        this.role = role;
+    }
 }

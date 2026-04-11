@@ -81,7 +81,7 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
         }
 
         return Collections.singletonList(
-                new SimpleGrantedAuthority("ROLE_" + account.getRole().name())
+                new SimpleGrantedAuthority("ROLE_" + account.getRole().getRole())
         );
     }
 

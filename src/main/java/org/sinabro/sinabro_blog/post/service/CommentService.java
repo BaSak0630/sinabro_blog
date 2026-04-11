@@ -32,9 +32,10 @@ public class CommentService {
                 .content(request.getContent())
                 .build();
 
-        post.addComment(comment);
+        comment.setPost(post);
+        Comment saved = commentRepository.save(comment);
 
-        return comment.getId();
+        return saved.getId();
     }
 
     public void delete(Long commentId, CommentDelete request) {

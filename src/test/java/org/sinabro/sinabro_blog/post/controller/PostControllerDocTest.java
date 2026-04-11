@@ -2,13 +2,17 @@ package org.sinabro.sinabro_blog.post.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.sinabro.sinabro_blog.annotation.SinabroMockUser;
+import org.sinabro.commonness.config.auth.PrincipalDetails;
 import org.sinabro.sinabro_blog.post.domain.Post;
 import org.sinabro.sinabro_blog.post.repository.PostRepository;
 import org.sinabro.sinabro_blog.post.request.PostCreate;
+import org.sinabro.sinabro_blog.post.request.PostEdit;
+import org.sinabro.commonness.user.domain.LocalAccount;
+import org.sinabro.commonness.user.domain.Role;
 import org.sinabro.commonness.user.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
@@ -17,6 +21,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.request.RequestDocumentation;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -26,11 +33,12 @@ import java.util.stream.IntStream;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.snippet.Attributes.key;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -38,7 +46,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@AutoConfigureRestDocs(uriScheme = "https",uriHost = "api.sinabro.org",uriPort = 443)
+@AutoConfigureRestDocs(uriScheme = "https", uriHost = "api.sinabro.org", uriPort = 443)
 @ExtendWith(RestDocumentationExtension.class)
 public class PostControllerDocTest {
 
@@ -54,23 +62,48 @@ public class PostControllerDocTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    private LocalAccount testAccount;
+
+    @BeforeEach
+    public void setUp() {
+        testAccount = LocalAccount.builder()
+                .accountId("daile1234")
+                .password(passwordEncoder.encode("password1234"))
+                .email("daile1234@gmail.com")
+                .username("김동혁")
+                .role(Role.USER)
+                .build();
+        accountRepository.save(testAccount);
+    }
+
     @AfterEach
     public void clean() {
         postRepository.deleteAll();
         accountRepository.deleteAll();
     }
 
+    private UsernamePasswordAuthenticationToken adminAuth() {
+        PrincipalDetails principalDetails = new PrincipalDetails(testAccount);
+        return new UsernamePasswordAuthenticationToken(
+                principalDetails, null,
+                List.of(new SimpleGrantedAuthority("ROLE_ADMIN"))
+        );
+    }
+
     @Test
-    @DisplayName("post id 단건 조회 테스트 ")
-    public void postInquiryTest() throws Exception{
+    @DisplayName("post id 단건 조회 테스트")
+    public void postInquiryTest() throws Exception {
         //given
         Post post = Post.builder()
                 .title("제목")
                 .content("내용")
+                .account(testAccount)
                 .build();
         Post save = postRepository.save(post);
         Long id = save.getId();
-
 
         //expected
         mockMvc.perform(get("/posts/{postId}", id)
@@ -86,14 +119,18 @@ public class PostControllerDocTest {
                                 fieldWithPath("title").description("제목"),
                                 fieldWithPath("content").description("내용"),
                                 fieldWithPath("regDate").description("최근 수정일"),
-                                fieldWithPath("comments").description("탯글 리스트")
+                                fieldWithPath("comments").description("댓글 리스트"),
+                                fieldWithPath("author").description("작성자 계정 아이디"),
+                                fieldWithPath("viewCount").description("조회수"),
+                                fieldWithPath("categoryId").description("카테고리 ID").optional(),
+                                fieldWithPath("categoryName").description("카테고리 이름").optional()
                         )
                 ));
     }
+
     @Test
-    @SinabroMockUser
     @DisplayName("글 등록")
-    public void postingTest() throws Exception{
+    public void postingTest() throws Exception {
         //given
         PostCreate request = PostCreate.builder()
                 .title("제목입니다.")
@@ -101,28 +138,71 @@ public class PostControllerDocTest {
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
+
         //expected
         mockMvc.perform(post("/posts")
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
-                        .content(json))
+                        .content(json)
+                        .with(authentication(adminAuth())))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("post-create",
                         requestFields(
                                 fieldWithPath("title").description("제목").attributes(key("constraint").value("좋은 제목 입력해주세요")),
-                                fieldWithPath("content").description("내용").optional()
+                                fieldWithPath("content").description("내용").optional(),
+                                fieldWithPath("categoryId").description("카테고리 ID").optional()
                         )
                 ));
     }
+
+    @Test
+    @DisplayName("글 수정")
+    public void postEditTest() throws Exception {
+        // given
+        Post post = Post.builder()
+                .title("원래 제목")
+                .content("원래 내용")
+                .account(testAccount)
+                .build();
+        Post savedPost = postRepository.save(post);
+
+        PostEdit request = PostEdit.builder()
+                .title("수정된 제목")
+                .content("수정된 내용")
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        // expected
+        mockMvc.perform(patch("/posts/{postId}", savedPost.getId())
+                        .contentType(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON)
+                        .content(json)
+                        .with(authentication(adminAuth())))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("post-edit",
+                        pathParameters(
+                                parameterWithName("postId").description("수정할 게시글 ID")
+                        ),
+                        requestFields(
+                                fieldWithPath("title").description("수정할 제목"),
+                                fieldWithPath("content").description("수정할 내용"),
+                                fieldWithPath("categoryId").description("카테고리 ID").optional()
+                        )
+                ));
+    }
+
     @Test
     @DisplayName("글 페이지 조회")
-    public void postsSearchTest() throws Exception{
+    public void postsSearchTest() throws Exception {
         //given
         List<Post> requestPosts = IntStream.range(1, 31)
                 .mapToObj(i -> Post.builder()
                         .title("daile title " + i)
                         .content("daile content " + i)
+                        .account(testAccount)
                         .build())
                 .collect(Collectors.toList());
 
@@ -146,7 +226,11 @@ public class PostControllerDocTest {
                                 fieldWithPath("items[].title").description("게시글 제목"),
                                 fieldWithPath("items[].content").description("게시글 내용"),
                                 fieldWithPath("items[].regDate").description("등록일"),
-                                fieldWithPath("items[].comments").description("댓글 리스트")
+                                fieldWithPath("items[].comments").description("댓글 리스트"),
+                                fieldWithPath("items[].author").description("작성자 계정 아이디"),
+                                fieldWithPath("items[].viewCount").description("조회수"),
+                                fieldWithPath("items[].categoryId").description("카테고리 ID").optional(),
+                                fieldWithPath("items[].categoryName").description("카테고리 이름").optional()
                         )
                 ));
     }

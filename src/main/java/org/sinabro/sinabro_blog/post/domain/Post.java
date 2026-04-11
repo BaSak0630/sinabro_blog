@@ -37,6 +37,13 @@ public class Post {
     @JsonIgnore
     private List<Comment> comments;
 
+    @Column(nullable = false)
+    private long viewCount = 0;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
+
     @Builder
     public Post(String title, String content, Account account) {
         this.title = title;
@@ -63,5 +70,13 @@ public class Post {
     public void addComment(Comment comment) {
         comment.setPost(this);
         this.comments.add(comment);
+    }
+
+    public void incrementViewCount() {
+        this.viewCount++;
+    }
+
+    public void assignCategory(Category category) {
+        this.category = category;
     }
 }

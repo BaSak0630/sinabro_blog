@@ -30,6 +30,14 @@ export default function PostComponent({ post }: Props) {
                 </button>
               </>
             )}
+            {post.categoryName && (
+              <>
+                <span className="text-slate-300">·</span>
+                <span className="bg-blue-50 text-blue-600 rounded px-1.5 py-0.5 text-xs font-medium">
+                  {post.categoryName}
+                </span>
+              </>
+            )}
           </p>
           <h2 className="text-lg font-semibold text-slate-800 group-hover:text-blue-600 transition-colors truncate">
             {post.title}

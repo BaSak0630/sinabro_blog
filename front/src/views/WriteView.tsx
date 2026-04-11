@@ -1,19 +1,29 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import MDEditor from '@uiw/react-md-editor'
 import { useNavigate } from 'react-router-dom'
 import { container } from 'tsyringe'
 import axios from 'axios'
 import PostWrite from '@/entity/post/PostWrite'
+import type Category from '@/entity/post/Category'
 import type HttpError from '@/http/HttpError'
 import PostRepository from '@/repository/PostRepository'
+import CategoryRepository from '@/repository/CategoryRepository'
 
 const POST_REPOSITORY = container.resolve(PostRepository)
+const CATEGORY_REPOSITORY = container.resolve(CategoryRepository)
 
 export default function WriteView() {
   const [postWrite, setPostWrite] = useState<PostWrite>(new PostWrite())
   const [uploading, setUploading] = useState(false)
+  const [categories, setCategories] = useState<Category[]>([])
+  const [newCategoryName, setNewCategoryName] = useState('')
+  const [showNewCategory, setShowNewCategory] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const navigate = useNavigate()
+
+  useEffect(() => {
+    CATEGORY_REPOSITORY.getAll().then(setCategories).catch(console.error)
+  }, [])
 
   function write() {
     POST_REPOSITORY.write(postWrite)
@@ -24,6 +34,20 @@ export default function WriteView() {
       .catch((e: HttpError) => {
         alert(e.getMessage())
       })
+  }
+
+  async function addCategory() {
+    if (!newCategoryName.trim()) return
+    try {
+      const created = await CATEGORY_REPOSITORY.create(newCategoryName.trim())
+      const updated = await CATEGORY_REPOSITORY.getAll()
+      setCategories(updated)
+      setPostWrite({ ...postWrite, categoryId: created.id })
+      setNewCategoryName('')
+      setShowNewCategory(false)
+    } catch {
+      alert('카테고리 추가에 실패했습니다.')
+    }
   }
 
   async function handleImageUpload(file: File) {
@@ -71,6 +95,47 @@ export default function WriteView() {
     <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-8">
       <h1 className="text-xl font-bold text-slate-800 mb-6 tracking-tight">새 글 작성</h1>
       <div className="flex flex-col gap-4">
+      <div>
+        <label className="block text-sm mb-1 text-slate-500">카테고리</label>
+        <div className="flex items-center gap-2">
+          <select
+            className="border rounded px-3 py-2 text-sm text-slate-700"
+            value={postWrite.categoryId ?? ''}
+            onChange={(e) => setPostWrite({ ...postWrite, categoryId: e.target.value ? Number(e.target.value) : null })}
+          >
+            <option value="">카테고리 없음</option>
+            {categories.map(c => (
+              <option key={c.id} value={c.id}>{c.name}</option>
+            ))}
+          </select>
+          <button
+            type="button"
+            className="text-xs border border-slate-300 rounded px-2 py-1.5 hover:bg-slate-50"
+            onClick={() => setShowNewCategory(v => !v)}
+          >
+            ＋ 새 카테고리
+          </button>
+        </div>
+        {showNewCategory && (
+          <div className="flex items-center gap-2 mt-2">
+            <input
+              className="border rounded px-3 py-1.5 text-sm"
+              placeholder="카테고리 이름"
+              value={newCategoryName}
+              onChange={(e) => setNewCategoryName(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && addCategory()}
+            />
+            <button
+              type="button"
+              className="text-xs bg-slate-800 text-white rounded px-3 py-1.5 hover:bg-slate-700"
+              onClick={addCategory}
+            >
+              저장
+            </button>
+          </div>
+        )}
+      </div>
+
       <div>
         <label className="block text-sm mb-1 text-slate-500">제목</label>
         <input

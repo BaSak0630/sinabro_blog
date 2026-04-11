@@ -16,16 +16,20 @@ public class PostCreate {
     @NotBlank(message = "콘텐츠을 입력해주세요")
     public final String content;
 
+    public final Long categoryId;
+
     @Builder
-    public PostCreate(String title, String content) {
+    public PostCreate(String title, String content, Long categoryId) {
         this.title = title;
         this.content = content;
+        this.categoryId = categoryId;
     }
 
     public PostCreate changeTitle(String title) {
         return PostCreate.builder()
                 .title(title)
                 .content(content)
+                .categoryId(categoryId)
                 .build();
     }
 

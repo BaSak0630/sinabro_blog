@@ -5,8 +5,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sinabro.commonness.exception.AccountNotFound;
 import org.sinabro.commonness.exception.PostNotFound;
+import org.sinabro.sinabro_blog.post.domain.Category;
 import org.sinabro.sinabro_blog.post.domain.Post;
 import org.sinabro.sinabro_blog.post.request.PostEditor;
+import org.sinabro.sinabro_blog.post.repository.CategoryRepository;
 import org.sinabro.sinabro_blog.post.repository.PostRepository;
 import org.sinabro.sinabro_blog.post.request.PostCreate;
 import org.sinabro.sinabro_blog.post.request.PostEdit;
@@ -24,6 +26,7 @@ public class PostService {
 
     private final AccountRepository accountRepository;
     private final PostRepository postRepository;
+    private final CategoryRepository categoryRepository;
 
     public void write(Long userId, PostCreate postCreate){
         var account = accountRepository.findById(userId).orElseThrow(AccountNotFound::new);
@@ -35,12 +38,19 @@ public class PostService {
                 .account(account)
                 .build();
 
+        if (postCreate.getCategoryId() != null) {
+            categoryRepository.findById(postCreate.getCategoryId())
+                    .ifPresent(post::assignCategory);
+        }
+
        postRepository.save(post);
     }
 
+    @Transactional
     public PostResponse get(Long id) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new PostNotFound());
+        post.incrementViewCount();
         return new PostResponse(post);
         /*
         * PostController -> WebPostService -> Repository
@@ -72,15 +82,12 @@ public class PostService {
 
         post.edit(postEditor);
 
-      /*  if(postEdit.getTitle() != null) {
-            editorBuilder.title(postEdit.getTitle());
+        if (postEdit.getCategoryId() != null) {
+            categoryRepository.findById(postEdit.getCategoryId())
+                    .ifPresent(post::assignCategory);
+        } else {
+            post.assignCategory(null);
         }
-
-        if(postEdit.getContent() != null) {
-            editorBuilder.content(postEdit.getContent());
-        }
-
-        post.edit( editorBuilder.build());*/
     }
 
     public void delete(Long id) {

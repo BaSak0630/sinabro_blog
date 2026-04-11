@@ -17,7 +17,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/fintree")
 public class SkillTreeController {
-
     private final SkillTreeService skillTreeService;
 
     /** 전체 스킬트리 조회 (비로그인 가능) */

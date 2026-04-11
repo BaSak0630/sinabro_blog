@@ -133,10 +133,9 @@ class CommentControllerDocTest {
                 .password("comment123")
                 .build();
 
-        commentService.write(testPost.getId(),request);
+        Long commentId = commentService.write(testPost.getId(), request);
 
         // given
-        Long commentId = 1L;
         CommentDelete request1 = CommentDelete.builder()
                 .password("comment123")
                 .build();

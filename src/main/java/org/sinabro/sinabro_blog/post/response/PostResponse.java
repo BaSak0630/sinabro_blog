@@ -20,6 +20,9 @@ public class PostResponse {
     private final LocalDateTime regDate;
     private final List<Comment> comments;
     private final String author;
+    private final long viewCount;
+    private final Long categoryId;
+    private final String categoryName;
 
     //생성자 오버로딩
     public PostResponse(Post post) {
@@ -29,15 +32,21 @@ public class PostResponse {
         this.regDate = post.getRegDate();
         this.comments = post.getComments();
         this.author = post.getAccount().getAccountId();
+        this.viewCount = post.getViewCount();
+        this.categoryId = post.getCategory() != null ? post.getCategory().getId() : null;
+        this.categoryName = post.getCategory() != null ? post.getCategory().getName() : null;
     }
 
     @Builder
-    public PostResponse(Long id, String title, String content, List<Comment> comments,  String author) {
+    public PostResponse(Long id, String title, String content, List<Comment> comments, String author) {
         this.id = id;
         this.title = title.substring(0, Math.min(title.length(), 10));
         this.content = content;
         this.regDate = LocalDateTime.now();
         this.comments = comments;
         this.author = author;
+        this.viewCount = 0;
+        this.categoryId = null;
+        this.categoryName = null;
     }
 }

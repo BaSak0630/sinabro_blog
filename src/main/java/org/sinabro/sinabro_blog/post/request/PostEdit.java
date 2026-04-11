@@ -17,9 +17,12 @@ public class PostEdit {
     @NotBlank(message = "콘텐츠을 입력해주세요")
     public final String content;
 
+    public final Long categoryId;
+
     @Builder
-    public PostEdit(String title, String content) {
+    public PostEdit(String title, String content, Long categoryId) {
         this.title = title;
         this.content = content;
+        this.categoryId = categoryId;
     }
 }

@@ -7,6 +7,8 @@ export default class Post {
   public content = ''
   public author = ''
   public comments = []
+  public categoryId: number | null = null
+  public categoryName = ''
 
   @Transform(({ value }) => LocalDateTime.parse(value, DateTimeFormatter.ISO_LOCAL_DATE_TIME))
   public regDate = LocalDateTime.now()
