@@ -43,6 +43,12 @@ export default function FinTreeNav() {
         </span>
 
         <nav className="flex items-center gap-5 text-sm text-slate-500">
+          <button
+            onClick={() => navigate('/fintree/tree')}
+            className="text-xs font-semibold text-slate-600 hover:text-emerald-600 transition-colors"
+          >
+            스킬트리
+          </button>
           {profile === null ? (
             <button
               onClick={() => navigate('/login', { state: { from: '/fintree' } })}

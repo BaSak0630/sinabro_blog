@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pdftotext \"C:/Users/babam/IdeaProjects/sinabro_blog/src/docs/638691f2-a400-4429-bc04-cdff0012ea60_DOKHU_위키_2.0.pdf\" -)",
+      "Bash(pdftoppm --version)",
+      "Bash(pdftoppm -r 120 -png \"C:/Users/babam/IdeaProjects/sinabro_blog/src/docs/638691f2-a400-4429-bc04-cdff0012ea60_DOKHU_위키_2.0.pdf\" \"/tmp/dokhu_page\")",
+      "Bash(ls /tmp/dokhu_page*.png)",
+      "PowerShell(Get-Command *)",
+      "Read(//mingw64/**)",
+      "Read(//usr/**)",
+      "Read(//c//**)",
+      "PowerShell(python3 -c \"import fitz; doc = fitz.open\\('C:/Users/babam/IdeaProjects/sinabro_blog/src/docs/638691f2-a400-4429-bc04-cdff0012ea60_DOKHU_위키_2.0.pdf'\\); print\\(f'{len\\(doc\\)} pages'\\)\" 2>&1)",
+      "PowerShell(npm install *)",
+      "PowerShell(node \"C:\\\\Users\\\\babam\\\\AppData\\\\Local\\\\Temp\\\\dokhu_pdf\\\\render.mjs\" 2>&1)",
+      "WebSearch",
+      "Bash(dir \"C:/Users/babam/IdeaProjects/sinabro_blog/src/docs/basakreview_blog_posts\")",
+      "PowerShell(& \"C:\\\\Program Files\\\\MySQL\\\\MySQL Server 8.0\\\\bin\\\\mysql.exe\" -u BaSak0630 \"-prlaehdgur1!\" sinabro -e \"SELECT id, name FROM category;\" 2>&1 | Where-Object { $_ -notmatch 'Warning' })",
+      "PowerShell(python --version 2>&1)",
+      "PowerShell(py *)",
+      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\babam\\\\IdeaProjects\\\\sinabro_blog\\\\src\\\\main\\\\java\" -Recurse | Where-Object { !$_.PSIsContainer } | Select-Object -First 40 FullName)"
+    ]
+  }
+}

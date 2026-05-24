@@ -12,6 +12,7 @@ import WriteView from '@/views/WriteView'
 import ReadView from '@/views/ReadView'
 import EditView from '@/views/EditView'
 import ProfileView from '@/views/ProfileView'
+import FinTreeLandingView from '@/views/FinTreeLandingView'
 import FinTreeHomeView from '@/views/FinTreeHomeView'
 import FinTreeNodeView from '@/views/FinTreeNodeView'
 import DokhuHomeView from '@/views/dokhu/DokhuHomeView'
@@ -47,7 +48,8 @@ export default function App() {
 
         {/* FinTree */}
         <Route path="/fintree" element={<FinTreeLayout />}>
-          <Route index element={<FinTreeHomeView />} />
+          <Route index element={<FinTreeLandingView />} />
+          <Route path="tree" element={<FinTreeHomeView />} />
           <Route path="nodes/:nodeId" element={<FinTreeNodeView />} />
         </Route>
 
