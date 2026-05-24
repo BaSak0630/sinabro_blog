@@ -22,7 +22,7 @@ export default class PostRepository {
   public getList(page: number) {
     return this.httpRepository.getList<Post>(
       {
-        path: `/api/posts?page=${page}&size=3`
+        path: `/api/posts?page=${page}&size=5`
       },
       Post
     )

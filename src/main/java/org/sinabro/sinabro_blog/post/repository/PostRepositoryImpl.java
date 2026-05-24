@@ -33,7 +33,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 .where(authorFilter)
                 .limit(postSearch.getSize())
                 .offset(postSearch.getOffset())
-                .orderBy(post.id.desc())
+                .orderBy(post.regDate.desc())
                 .fetch();
 
         return new PageImpl<>(items, postSearch.getPageable(), totalCount);

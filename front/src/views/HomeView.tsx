@@ -16,7 +16,7 @@ export default function HomeView() {
 
   useEffect(() => { getList() }, [])
 
-  const totalPages = Math.ceil(postList.totalCount / 3)
+  const totalPages = Math.ceil(postList.totalCount / (postList.size || 5))
 
   return (
     <div>

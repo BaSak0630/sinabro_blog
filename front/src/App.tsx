@@ -2,6 +2,7 @@ import React from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import BlogLayout from '@/layouts/BlogLayout'
 import FinTreeLayout from '@/layouts/FinTreeLayout'
+import DokhuLayout from '@/layouts/DokhuLayout'
 import AdminLayout from '@/layouts/AdminLayout'
 import RequireAdmin from '@/components/RequireAdmin'
 import MainView from '@/views/MainView'
@@ -13,6 +14,13 @@ import EditView from '@/views/EditView'
 import ProfileView from '@/views/ProfileView'
 import FinTreeHomeView from '@/views/FinTreeHomeView'
 import FinTreeNodeView from '@/views/FinTreeNodeView'
+import DokhuHomeView from '@/views/dokhu/DokhuHomeView'
+import DokhuLibraryView from '@/views/dokhu/DokhuLibraryView'
+import DokhuBookDetailView from '@/views/dokhu/DokhuBookDetailView'
+import DokhuFlowView from '@/views/dokhu/DokhuFlowView'
+import DokhuNoteView from '@/views/dokhu/DokhuNoteView'
+import DokhuMailboxView from '@/views/dokhu/DokhuMailboxView'
+import DokhuStatsView from '@/views/dokhu/DokhuStatsView'
 import AdminDashboardView from '@/views/admin/AdminDashboardView'
 import AdminUsersView from '@/views/admin/AdminUsersView'
 import AdminPostsView from '@/views/admin/AdminPostsView'
@@ -41,6 +49,17 @@ export default function App() {
         <Route path="/fintree" element={<FinTreeLayout />}>
           <Route index element={<FinTreeHomeView />} />
           <Route path="nodes/:nodeId" element={<FinTreeNodeView />} />
+        </Route>
+
+        {/* DOKHU */}
+        <Route path="/dokhu" element={<DokhuLayout />}>
+          <Route index element={<DokhuHomeView />} />
+          <Route path="library" element={<DokhuLibraryView />} />
+          <Route path="book/:userBookId" element={<DokhuBookDetailView />} />
+          <Route path="flow/:userBookId" element={<DokhuFlowView />} />
+          <Route path="note/:userBookId" element={<DokhuNoteView />} />
+          <Route path="mailbox" element={<DokhuMailboxView />} />
+          <Route path="stats" element={<DokhuStatsView />} />
         </Route>
 
         {/* Admin */}

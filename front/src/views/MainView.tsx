@@ -34,6 +34,14 @@ const SERVICES: ServiceCard[] = [
     available: true,
     color: 'from-emerald-500 to-teal-600',
   },
+  {
+    name: 'DOKHU',
+    description: '독서를 기록하고 집중 독서 세션으로 책을 완독하는 서비스',
+    tag: 'READING',
+    path: '/dokhu',
+    available: true,
+    color: 'from-amber-500 to-orange-500',
+  },
 ]
 
 export default function MainView() {
