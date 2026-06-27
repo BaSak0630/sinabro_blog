@@ -54,7 +54,10 @@
       "Bash(nvm install *)",
       "Bash(nvm use *)",
       "Bash(/c/nvm4w/nodejs20/node --version)",
-      "PowerShell(nvm use *)"
+      "PowerShell(nvm use *)",
+      "Bash(git reset *)",
+      "Bash(git rm *)",
+      "Bash(git add *)"
     ]
   }
 }
