@@ -50,6 +50,12 @@ export default function DokhuNav() {
             홈
           </button>
           <button
+            onClick={() => navigate('/dokhu/books')}
+            className="px-3 py-1.5 rounded-lg text-slate-500 hover:bg-amber-50 hover:text-amber-700 transition-colors text-xs font-medium"
+          >
+            탐색
+          </button>
+          <button
             onClick={() => navigate('/dokhu/library')}
             className="px-3 py-1.5 rounded-lg text-slate-500 hover:bg-amber-50 hover:text-amber-700 transition-colors text-xs font-medium"
           >

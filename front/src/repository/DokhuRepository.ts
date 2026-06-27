@@ -1,12 +1,32 @@
 import { inject, singleton } from 'tsyringe'
 import AxiosHttpClient from '@/http/AxiosHttpClient'
-import type { UserBook } from '@/entity/dokhu/UserBook'
+import type { Book, UserBook } from '@/entity/dokhu/UserBook'
 import type { FlowSession } from '@/entity/dokhu/FlowSession'
 import type { BookNote, BookMemo } from '@/entity/dokhu/BookNote'
 
 @singleton()
 export default class DokhuRepository {
   constructor(@inject(AxiosHttpClient) private readonly client: AxiosHttpClient) {}
+
+  // Books (catalog)
+  getBooks(keyword?: string, genre?: string): Promise<Book[]> {
+    const params: Record<string, string> = {}
+    if (keyword) params.keyword = keyword
+    if (genre) params.genre = genre
+    return this.client.request({ method: 'GET', path: '/api/dokhu/books', params })
+  }
+
+  getBook(bookId: number): Promise<Book> {
+    return this.client.request({ method: 'GET', path: `/api/dokhu/books/${bookId}` })
+  }
+
+  getGenres(): Promise<string[]> {
+    return this.client.request({ method: 'GET', path: '/api/dokhu/books/genres' })
+  }
+
+  addExistingBookToLibrary(bookId: number): Promise<UserBook> {
+    return this.client.request({ method: 'POST', path: `/api/dokhu/library/from/${bookId}` })
+  }
 
   // Library
   getLibrary(status?: string): Promise<UserBook[]> {

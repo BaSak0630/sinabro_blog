@@ -42,4 +42,18 @@ public class Book {
         this.publishDate = publishDate;
         this.synopsis = synopsis;
     }
+
+    public void update(String title, String author, String isbn, String coverImageUrl,
+                       String publisher, String genre, Integer totalPages,
+                       String publishDate, String synopsis) {
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
+        this.coverImageUrl = coverImageUrl;
+        this.publisher = publisher;
+        this.genre = genre;
+        this.totalPages = totalPages;
+        this.publishDate = publishDate;
+        this.synopsis = synopsis;
+    }
 }

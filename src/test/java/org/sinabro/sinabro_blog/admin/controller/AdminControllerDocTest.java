@@ -55,6 +55,8 @@ public class AdminControllerDocTest {
 
     @BeforeEach
     public void setUp() {
+        postRepository.deleteAll();
+        accountRepository.deleteAll();
         testAccount = LocalAccount.builder()
                 .accountId("testuser123")
                 .password(passwordEncoder.encode("password1234"))

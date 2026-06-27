@@ -6,6 +6,7 @@ const NAV_ITEMS = [
   { label: '유저 관리', path: '/admin/users' },
   { label: '게시글 관리', path: '/admin/posts' },
   { label: '카테고리 관리', path: '/admin/categories' },
+  { label: '책 관리', path: '/admin/books' },
 ]
 
 export default function AdminLayout() {

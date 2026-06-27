@@ -64,6 +64,8 @@ class CommentControllerDocTest {
 
     @BeforeEach
     public void setUp() {
+        postRepository.deleteAll();
+        accountRepository.deleteAll();
         // 테스트 계정 생성
         testAccount = LocalAccount.builder()
                 .accountId("testuser")

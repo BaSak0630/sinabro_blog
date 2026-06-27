@@ -60,6 +60,8 @@ public class SecurityConfig {
                         authorizeRequests -> authorizeRequests
                                 .requestMatchers("/user/**").authenticated()
                                 .requestMatchers("/users/me").authenticated()
+                                .requestMatchers("/dokhu/notices").permitAll()
+                                .requestMatchers("/dokhu/books", "/dokhu/books/**").permitAll()
                                 .requestMatchers("/dokhu/**").authenticated()
                                 .requestMatchers("/manager/**").hasAnyRole("ADMIN", "MANAGER")
                                 .requestMatchers("/admin/**").hasAnyRole("ADMIN")

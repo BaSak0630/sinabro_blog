@@ -22,10 +22,12 @@ import DokhuFlowView from '@/views/dokhu/DokhuFlowView'
 import DokhuNoteView from '@/views/dokhu/DokhuNoteView'
 import DokhuMailboxView from '@/views/dokhu/DokhuMailboxView'
 import DokhuStatsView from '@/views/dokhu/DokhuStatsView'
+import DokhuBookStoreView from '@/views/dokhu/DokhuBookStoreView'
 import AdminDashboardView from '@/views/admin/AdminDashboardView'
 import AdminUsersView from '@/views/admin/AdminUsersView'
 import AdminPostsView from '@/views/admin/AdminPostsView'
 import AdminCategoriesView from '@/views/admin/AdminCategoriesView'
+import AdminBooksView from '@/views/admin/AdminBooksView'
 
 export default function App() {
   return (
@@ -60,6 +62,7 @@ export default function App() {
           <Route path="book/:userBookId" element={<DokhuBookDetailView />} />
           <Route path="flow/:userBookId" element={<DokhuFlowView />} />
           <Route path="note/:userBookId" element={<DokhuNoteView />} />
+          <Route path="books" element={<DokhuBookStoreView />} />
           <Route path="mailbox" element={<DokhuMailboxView />} />
           <Route path="stats" element={<DokhuStatsView />} />
         </Route>
@@ -70,6 +73,7 @@ export default function App() {
           <Route path="users" element={<AdminUsersView />} />
           <Route path="posts" element={<AdminPostsView />} />
           <Route path="categories" element={<AdminCategoriesView />} />
+          <Route path="books" element={<AdminBooksView />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/" replace />} />

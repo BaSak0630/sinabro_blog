@@ -95,4 +95,17 @@ public class LibraryService {
                 .orElseThrow(() -> new RuntimeException("책을 찾을 수 없습니다."));
         userBookRepository.delete(userBook);
     }
+
+    @Transactional
+    public UserBookResponse addExistingBook(Long accountId, Long bookId) {
+        Account account = accountRepository.findById(accountId).orElseThrow(UserNotFound::new);
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new RuntimeException("책을 찾을 수 없습니다."));
+        UserBook userBook = userBookRepository.save(UserBook.builder()
+                .account(account)
+                .book(book)
+                .status(ReadingStatus.ADDING)
+                .build());
+        return new UserBookResponse(userBook);
+    }
 }
