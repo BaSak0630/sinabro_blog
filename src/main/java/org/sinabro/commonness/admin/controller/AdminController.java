@@ -6,6 +6,9 @@ import org.sinabro.commonness.admin.response.AdminPageResponse;
 import org.sinabro.commonness.admin.response.AdminStatsResponse;
 import org.sinabro.commonness.admin.response.UserAdminResponse;
 import org.sinabro.commonness.admin.service.AdminService;
+import org.sinabro.dokhu.request.BookRegisterRequest;
+import org.sinabro.dokhu.response.BookResponse;
+import org.sinabro.dokhu.service.BookService;
 import org.sinabro.sinabro_blog.post.service.PostService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -19,6 +22,7 @@ public class AdminController {
 
     private final AdminService adminService;
     private final PostService postService;
+    private final BookService bookService;
 
     @GetMapping("/stats")
     public AdminStatsResponse getStats() {
@@ -48,6 +52,30 @@ public class AdminController {
     @DeleteMapping("/posts/{id}")
     public ResponseEntity<Void> deletePost(@PathVariable Long id) {
         postService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/books")
+    public AdminPageResponse<BookResponse> getBooks(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "20") int size) {
+        return bookService.getAdminBooks(keyword, page, size);
+    }
+
+    @PostMapping("/books")
+    public BookResponse createBook(@RequestBody BookRegisterRequest request) {
+        return bookService.createBook(request);
+    }
+
+    @PatchMapping("/books/{id}")
+    public BookResponse updateBook(@PathVariable Long id, @RequestBody BookRegisterRequest request) {
+        return bookService.updateBook(id, request);
+    }
+
+    @DeleteMapping("/books/{id}")
+    public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
+        bookService.deleteBook(id);
         return ResponseEntity.noContent().build();
     }
 }

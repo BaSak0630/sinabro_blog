@@ -47,6 +47,11 @@ public class FlowSessionService {
                 .orElseThrow(() -> new RuntimeException("세션을 찾을 수 없습니다."));
 
         session.end(request.getMemo(), request.getBookmarkPage());
+
+        if (request.getBookmarkPage() != null) {
+            session.getUserBook().updateProgress(request.getBookmarkPage());
+        }
+
         return new FlowSessionResponse(session);
     }
 

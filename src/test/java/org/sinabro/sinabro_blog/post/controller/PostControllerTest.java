@@ -51,6 +51,8 @@ class PostControllerTest {
 
     @BeforeEach
     void setUp() {
+        postRepository.deleteAll();
+        userRepository.deleteAll();
         testAccount = LocalAccount.builder()
                 .accountId("daile1234")
                 .password(passwordEncoder.encode("password1234"))

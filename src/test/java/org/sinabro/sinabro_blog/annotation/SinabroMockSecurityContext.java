@@ -22,14 +22,16 @@ public class SinabroMockSecurityContext implements WithSecurityContextFactory<Si
         String password = annotation.password();
         String name = annotation.name();
         String email = annotation.email();
-        var user = LocalAccount.builder()
-                .accountId(username)
-                .password(password)
-                .email(email)
-                .username(name)
-                .build();
-
-        accountRepository.save(user);
+        var user = (LocalAccount) accountRepository.findByAccountId(username)
+                .orElseGet(() -> {
+                    LocalAccount newUser = LocalAccount.builder()
+                            .accountId(username)
+                            .password(password)
+                            .email(email)
+                            .username(name)
+                            .build();
+                    return accountRepository.save(newUser);
+                });
 
         var principal = new UserPrincipal(user);
 

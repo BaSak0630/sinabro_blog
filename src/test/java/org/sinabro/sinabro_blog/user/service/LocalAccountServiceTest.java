@@ -2,12 +2,14 @@ package org.sinabro.sinabro_blog.user.service;
 
 import jakarta.validation.ValidationException;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.sinabro.commonness.user.domain.Account;
 import org.sinabro.commonness.user.domain.LocalAccount;
 import org.sinabro.commonness.user.repository.AccountRepository;
 import org.sinabro.commonness.user.service.AccountService;
+import org.sinabro.sinabro_blog.post.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -25,8 +27,18 @@ class LocalAccountServiceTest {
     @Autowired
     private AccountRepository accountRepository;
 
+    @Autowired
+    private PostRepository postRepository;
+
+    @BeforeEach
+    public void setUp() {
+        postRepository.deleteAll();
+        accountRepository.deleteAll();
+    }
+
     @AfterEach
     public void clean() {
+        postRepository.deleteAll();
         accountRepository.deleteAll();
     }
 

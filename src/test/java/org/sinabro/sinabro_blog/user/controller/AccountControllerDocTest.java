@@ -1,6 +1,7 @@
 package org.sinabro.sinabro_blog.user.controller;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -8,6 +9,7 @@ import org.sinabro.commonness.config.auth.PrincipalDetails;
 import org.sinabro.commonness.user.domain.LocalAccount;
 import org.sinabro.commonness.user.domain.Role;
 import org.sinabro.commonness.user.repository.AccountRepository;
+import org.sinabro.sinabro_blog.post.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -44,10 +46,20 @@ public class AccountControllerDocTest {
     private AccountRepository accountRepository;
 
     @Autowired
+    private PostRepository postRepository;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @BeforeEach
+    public void setUp() {
+        postRepository.deleteAll();
+        accountRepository.deleteAll();
+    }
 
     @AfterEach
     public void clean() {
+        postRepository.deleteAll();
         accountRepository.deleteAll();
     }
 

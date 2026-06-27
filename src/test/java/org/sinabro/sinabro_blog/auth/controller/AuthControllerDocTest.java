@@ -10,6 +10,7 @@ import org.sinabro.sinabro_blog.annotation.SinabroMockUser;
 import org.sinabro.commonness.auth.request.Login;
 import org.sinabro.commonness.auth.request.SignUp;
 import org.sinabro.commonness.user.repository.AccountRepository;
+import org.sinabro.sinabro_blog.post.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -39,15 +40,21 @@ class AuthControllerDocTest {
     private AccountRepository accountRepository;
 
     @Autowired
-    private ObjectMapper objectMapper;
+    private PostRepository postRepository;
 
-    @AfterEach
-    public void clean() {
-        accountRepository.deleteAll();
-    }
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @BeforeEach
     void setUp() {
+        postRepository.deleteAll();
+        accountRepository.deleteAll();
+    }
+
+    @AfterEach
+    public void clean() {
+        postRepository.deleteAll();
+        accountRepository.deleteAll();
     }
 
     @Test

@@ -34,13 +34,13 @@ export default function FinTreeNav() {
           <span className="text-slate-400">◀</span> Sinabro
         </button>
 
-        <span
-          className="text-base font-bold tracking-tight cursor-pointer hover:text-emerald-600 transition-colors"
+        <button
+          className="text-base font-bold tracking-tight hover:text-emerald-600 transition-colors bg-transparent border-0 p-0"
           style={{ color: '#059669' }}
           onClick={() => navigate('/fintree')}
         >
           FinTree
-        </span>
+        </button>
 
         <nav className="flex items-center gap-5 text-sm text-slate-500">
           <button

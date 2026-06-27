@@ -63,4 +63,11 @@ public class LibraryController {
             @PathVariable Long userBookId) {
         libraryService.deleteUserBook(principal.getAccount().getId(), userBookId);
     }
+
+    @PostMapping("/from/{bookId}")
+    public UserBookResponse addExistingBook(
+            @AuthenticationPrincipal PrincipalDetails principal,
+            @PathVariable Long bookId) {
+        return libraryService.addExistingBook(principal.getAccount().getId(), bookId);
+    }
 }
