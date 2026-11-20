@@ -26,21 +26,21 @@ public class IndexController {
     private AuthService authService;
     @Autowired
     private OAuth2AuthorizedClientService authorizedClientService;
+    @Autowired
+    private RestTemplate restTemplate;
 
     @GetMapping("/test/login")
     public @ResponseBody String testLogin(Authentication authentication, @AuthenticationPrincipal PrincipalDetails userDetails) { //2가지 방법 가능
-        System.out.println("/test/login ===========");
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-        System.out.println("authentication = " + principalDetails.getAccount());
-        System.out.println("userDetails = " + userDetails.getAccount());
+        log.debug("authentication = {}", principalDetails.getAccount());
+        log.debug("userDetails = {}", userDetails.getAccount());
         return "세션 정보 확인 하기";
     }
     @GetMapping("/test/oauth/login")
     public @ResponseBody String testOAuthLogin(Authentication authentication, @AuthenticationPrincipal OAuth2User oAuth) { //2가지 방법 가능
-        System.out.println("/test/oauth/login ===========");
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-        System.out.println("authentication = " + oAuth2User.getAttributes());
-        System.out.println("oAuth2User = " + oAuth.getAttributes());
+        log.debug("authentication = {}", oAuth2User.getAttributes());
+        log.debug("oAuth2User = {}", oAuth.getAttributes());
         return "OAuth 세션 정보 확인 하기";
     }
 
@@ -51,19 +51,19 @@ public class IndexController {
 
     @GetMapping({"/user"})
     public @ResponseBody String user(@AuthenticationPrincipal PrincipalDetails principalDetails) {// /test참고
-        System.out.println("principal details = " + principalDetails.getAccount());
+        log.debug("principal details = {}", principalDetails.getAccount());
         return "user";
     }
 
     @GetMapping({"/admin"})
     public @ResponseBody String admin(@AuthenticationPrincipal PrincipalDetails principalDetails) {
-        System.out.println("principal details = " + principalDetails.getAccount());
+        log.debug("principal details = {}", principalDetails.getAccount());
         return "admin";
     }
 
     @GetMapping({"/manager"})
     public @ResponseBody String manager(@AuthenticationPrincipal PrincipalDetails principalDetails) {
-        System.out.println("principal details = " + principalDetails.getAccount());
+        log.debug("principal details = {}", principalDetails.getAccount());
         return "manager";
     }
 
@@ -80,7 +80,7 @@ public class IndexController {
 
     @PostMapping({"/join"})
     public @ResponseBody String join(SignUp signup) {
-        System.out.println(signup);
+        log.debug("signup = {}", signup);
         authService.signup(signup);
         return "/loginForm";
     }
@@ -111,14 +111,13 @@ public class IndexController {
     private void revokeGoogleToken(String accessToken) {
         String revokeUrl = "https://oauth2.googleapis.com/revoke?token=" + accessToken;
 
-        RestTemplate restTemplate = new RestTemplate();
         try {
             ResponseEntity<String> response = restTemplate.postForEntity(revokeUrl, null, String.class);
             if (response.getStatusCode().is2xxSuccessful()) {
-                System.out.println("토큰이 성공적으로 철회되었습니다.");
+                log.debug("토큰이 성공적으로 철회되었습니다.");
             }
         } catch (Exception e) {
-            System.err.println("토큰 철회 실패: " + e.getMessage());
+            log.warn("토큰 철회 실패: {}", e.getMessage());
         }
     }
 

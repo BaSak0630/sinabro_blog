@@ -7,6 +7,7 @@ export type HttpRequestConfig = {
   path: string
   params?: any
   body?: any
+  timeout?: number
 }
 
 @singleton()
@@ -27,6 +28,7 @@ export default class AxiosHttpClient {
         url: config.path,
         params: config.params,
         data: config.body,
+        timeout: config.timeout,
         withCredentials: true
       })
       .then((response: AxiosResponse) => {

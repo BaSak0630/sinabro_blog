@@ -8,7 +8,7 @@ interface Props {
 
 export default function PostComponent({ post }: Props) {
   const navigate = useNavigate()
-  const excerpt = post.content.replace(/[#*`>_\-!\[\]]/g, '').substring(0, 120)
+  const excerpt = post.content.replace(/[#*`>_\-![\]]/g, '').substring(0, 120)
 
   return (
     <Link

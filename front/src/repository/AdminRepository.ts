@@ -11,6 +11,7 @@ interface BookForm {
   title: string; author: string; isbn?: string; coverImageUrl?: string
   publisher?: string; genre?: string; totalPages?: number; publishDate?: string; synopsis?: string
 }
+export interface MarketRefreshResult { symbol: string; success: boolean; message: string }
 
 @singleton()
 export default class AdminRepository {
@@ -64,5 +65,10 @@ export default class AdminRepository {
 
   public deleteBook(id: number): Promise<void> {
     return this.client.request({ method: 'DELETE', path: `/api/admin/books/${id}` })
+  }
+
+  public refreshMarketData(): Promise<MarketRefreshResult[]> {
+    // 심볼 3개 순차 호출 + 버스트 제한 회피 대기로 5초 가까이 걸릴 수 있어 기본 3초보다 넉넉히 잡음
+    return this.client.request({ method: 'POST', path: '/api/admin/market/refresh', timeout: 15000 })
   }
 }

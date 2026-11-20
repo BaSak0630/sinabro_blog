@@ -5,12 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
 
 public class NaverUserInfo implements OAuth2UserInfo {
+    private static final ObjectMapper MAPPER = new ObjectMapper();
     private final Map<String, Object> attributes;
 
     public NaverUserInfo(Map<String, Object> attributes) {
-        ObjectMapper mapper = new ObjectMapper();
         Object response = attributes.get("response");
-        this.attributes = mapper.convertValue(response, Map.class);
+        this.attributes = MAPPER.convertValue(response, Map.class);
 
     }
 

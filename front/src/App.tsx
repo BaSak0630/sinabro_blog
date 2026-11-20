@@ -16,6 +16,7 @@ import FinTreeLandingView from '@/views/FinTreeLandingView'
 import FinTreeHomeView from '@/views/FinTreeHomeView'
 import FinTreeNodeView from '@/views/FinTreeNodeView'
 import DokhuHomeView from '@/views/dokhu/DokhuHomeView'
+import DokhuDashboardView from '@/views/dokhu/DokhuDashboardView'
 import DokhuLibraryView from '@/views/dokhu/DokhuLibraryView'
 import DokhuBookDetailView from '@/views/dokhu/DokhuBookDetailView'
 import DokhuFlowView from '@/views/dokhu/DokhuFlowView'
@@ -23,6 +24,7 @@ import DokhuNoteView from '@/views/dokhu/DokhuNoteView'
 import DokhuMailboxView from '@/views/dokhu/DokhuMailboxView'
 import DokhuStatsView from '@/views/dokhu/DokhuStatsView'
 import DokhuBookStoreView from '@/views/dokhu/DokhuBookStoreView'
+import DokhuBookCatalogDetailView from '@/views/dokhu/DokhuBookCatalogDetailView'
 import AdminDashboardView from '@/views/admin/AdminDashboardView'
 import AdminUsersView from '@/views/admin/AdminUsersView'
 import AdminPostsView from '@/views/admin/AdminPostsView'
@@ -58,11 +60,13 @@ export default function App() {
         {/* DOKHU */}
         <Route path="/dokhu" element={<DokhuLayout />}>
           <Route index element={<DokhuHomeView />} />
+          <Route path="dashboard" element={<DokhuDashboardView />} />
           <Route path="library" element={<DokhuLibraryView />} />
           <Route path="book/:userBookId" element={<DokhuBookDetailView />} />
           <Route path="flow/:userBookId" element={<DokhuFlowView />} />
           <Route path="note/:userBookId" element={<DokhuNoteView />} />
           <Route path="books" element={<DokhuBookStoreView />} />
+          <Route path="books/:bookId" element={<DokhuBookCatalogDetailView />} />
           <Route path="mailbox" element={<DokhuMailboxView />} />
           <Route path="stats" element={<DokhuStatsView />} />
         </Route>

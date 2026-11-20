@@ -34,20 +34,5 @@ public class PostSearch {
 
     public Pageable getPageable() {
         return PageRequest.of(page - 1, size);
-    } //getPageable 에서 기존 -1을 안해서 컨테츠 개수+ page.size가 됨
-   /* private static final int MAX_SIZE = 200;
-
-    @Builder.Default
-    private Integer page = 1;
-
-    @Builder.Default
-    private Integer size = 10;
-
-    public long getOffset(){
-        return (long)(max(1,page )- 1) * min(size, MAX_SIZE);
     }
-
-    public Pageable getPageable(){
-        return PageRequest.of(page, size);
-    }*/
 }

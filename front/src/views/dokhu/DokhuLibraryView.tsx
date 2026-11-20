@@ -37,7 +37,7 @@ function loadCategories(): ShelfCategory[] {
   try {
     const s = localStorage.getItem(SHELF_KEY)
     if (s) return JSON.parse(s)
-  } catch {}
+  } catch { /* corrupted cache, fall back to default */ }
   return [{ id: 'default', name: '서재', bookIds: [] }]
 }
 
@@ -268,7 +268,7 @@ function SpineView({
     }
   }
 
-  function handleDrop(e: React.DragEvent, catId: string) {
+  function handleDrop(e: React.DragEvent) {
     e.preventDefault()
     e.stopPropagation()
     if (!dragging || !dropState) { setDragging(null); setDropState(null); return }
@@ -374,7 +374,7 @@ function SpineView({
               /* 빈 책장 드롭존 */
               <div
                 onDragOver={e => handleShelfDragOver(e, cat.id)}
-                onDrop={e => handleDrop(e, cat.id)}
+                onDrop={e => handleDrop(e)}
               >
                 <div
                   className="flex items-center justify-center rounded-t-md"
@@ -398,7 +398,7 @@ function SpineView({
                     className="flex items-end px-3 pt-10"
                     style={{ background: '#070707', minHeight: 175, gap: 1, borderRadius: rowIdx === 0 ? '6px 6px 0 0' : '0' }}
                     onDragOver={e => handleShelfDragOver(e, cat.id)}
-                    onDrop={e => handleDrop(e, cat.id)}
+                    onDrop={e => handleDrop(e)}
                   >
                     {rowBooks.map((ub) => {
                       const pages = ub.book.totalPages ?? 220
@@ -420,7 +420,7 @@ function SpineView({
                             onDragStart={e => handleDragStart(e, ub.id, cat.id)}
                             onDragEnd={handleDragEnd}
                             onDragOver={e => handleDragOver(e, cat.id, ub.id, e.currentTarget)}
-                            onDrop={e => handleDrop(e, cat.id)}
+                            onDrop={e => handleDrop(e)}
                             onMouseEnter={() => !dragging && setTooltip(ub.id)}
                             onMouseLeave={() => setTooltip(null)}
                             onClick={e => { if (!dragging) { e.stopPropagation(); onBook(ub.id) } }}

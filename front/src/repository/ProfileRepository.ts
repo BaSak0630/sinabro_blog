@@ -10,6 +10,6 @@ export default class ProfileRepository {
   }
 
   public clear() {
-    localStorage.clear()
+    localStorage.removeItem('profile')
   }
 }

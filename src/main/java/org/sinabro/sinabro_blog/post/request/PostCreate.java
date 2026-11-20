@@ -4,19 +4,18 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
-import org.sinabro.commonness.exception.InvalidRequest;
 
 @ToString
 @Getter
 public class PostCreate {
 
     @NotBlank(message = "타이틀을 입력해주세요") //값이 주입될때 검증을 해줌
-    public final String title;
+    private final String title;
 
     @NotBlank(message = "콘텐츠을 입력해주세요")
-    public final String content;
+    private final String content;
 
-    public final Long categoryId;
+    private final Long categoryId;
 
     @Builder
     public PostCreate(String title, String content, Long categoryId) {
@@ -31,12 +30,6 @@ public class PostCreate {
                 .content(content)
                 .categoryId(categoryId)
                 .build();
-    }
-
-    public void validate() {
-        if (this.title.contains("바보")) {
-            throw new InvalidRequest("title","제목에 바보를 포함할 수 없읍니다.");
-        }
     }
     //빌더의 장점
     // 가독성이 좋다.

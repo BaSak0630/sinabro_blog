@@ -14,6 +14,7 @@ import java.util.List;
 @Getter
 
 public class PostResponse {
+    private static final int TITLE_MAX_LENGTH = 10;
     private final Long id;
     private final String title;
     private final String content;
@@ -40,7 +41,7 @@ public class PostResponse {
     @Builder
     public PostResponse(Long id, String title, String content, List<Comment> comments, String author) {
         this.id = id;
-        this.title = title.substring(0, Math.min(title.length(), 10));
+        this.title = title.substring(0, Math.min(title.length(), TITLE_MAX_LENGTH));
         this.content = content;
         this.regDate = LocalDateTime.now();
         this.comments = comments;

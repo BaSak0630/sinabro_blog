@@ -1,21 +1,20 @@
-import axios from 'axios'
-import { singleton } from 'tsyringe'
+import { inject, singleton } from 'tsyringe'
+import AxiosHttpClient from '@/http/AxiosHttpClient'
 import type Category from '@/entity/post/Category'
 
 @singleton()
 export default class CategoryRepository {
+  constructor(@inject(AxiosHttpClient) private readonly client: AxiosHttpClient) {}
+
   public getAll(): Promise<Category[]> {
-    return axios.get<Category[]>('/api/categories', { withCredentials: true })
-      .then(res => res.data)
+    return this.client.request({ method: 'GET', path: '/api/categories' })
   }
 
   public create(name: string): Promise<Category> {
-    return axios.post<Category>('/api/admin/categories', { name }, { withCredentials: true })
-      .then(res => res.data)
+    return this.client.request({ method: 'POST', path: '/api/admin/categories', body: { name } })
   }
 
   public delete(id: number): Promise<void> {
-    return axios.delete(`/api/admin/categories/${id}`, { withCredentials: true })
-      .then(() => undefined)
+    return this.client.request({ method: 'DELETE', path: `/api/admin/categories/${id}` })
   }
 }

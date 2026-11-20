@@ -9,6 +9,8 @@ import PublicProfile from '@/entity/user/PublicProfile'
 export default class AccountRepository {
   constructor(@inject(HttpRepository) private readonly httpRepository: HttpRepository) {}
 
+  private profilePromise: Promise<UserProfile> | null = null
+
   public login(request: Login) {
     return this.httpRepository.post({
       path: '/api/auth/login',
@@ -17,12 +19,15 @@ export default class AccountRepository {
   }
 
   public getProfile() {
-    return this.httpRepository.get<UserProfile>(
-      {
-        path: '/api/users/me',
-      },
-      UserProfile
-    )
+    if (!this.profilePromise) {
+      this.profilePromise = this.httpRepository
+        .get<UserProfile>({ path: '/api/users/me' }, UserProfile)
+        .catch((e) => {
+          this.profilePromise = null
+          throw e
+        })
+    }
+    return this.profilePromise
   }
 
   public signUp(request: SignUp) {

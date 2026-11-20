@@ -5,6 +5,6 @@ export default class UserProfile {
   public role = ''
 
   public isAdmin(): boolean {
-    return this.role === 'ROLE_ADMIN'
+    return this.role === 'ADMIN'
   }
 }

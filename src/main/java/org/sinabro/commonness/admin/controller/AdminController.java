@@ -9,11 +9,15 @@ import org.sinabro.commonness.admin.service.AdminService;
 import org.sinabro.dokhu.request.BookRegisterRequest;
 import org.sinabro.dokhu.response.BookResponse;
 import org.sinabro.dokhu.service.BookService;
+import org.sinabro.fintree.response.MarketRefreshResult;
+import org.sinabro.fintree.service.MarketDataScheduler;
 import org.sinabro.sinabro_blog.post.service.PostService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin")
@@ -23,6 +27,7 @@ public class AdminController {
     private final AdminService adminService;
     private final PostService postService;
     private final BookService bookService;
+    private final MarketDataScheduler marketDataScheduler;
 
     @GetMapping("/stats")
     public AdminStatsResponse getStats() {
@@ -77,5 +82,10 @@ public class AdminController {
     public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
         bookService.deleteBook(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/market/refresh")
+    public ResponseEntity<List<MarketRefreshResult>> refreshMarketData() {
+        return ResponseEntity.ok(marketDataScheduler.fetchAndStore());
     }
 }

@@ -64,7 +64,9 @@ export default function LoginView() {
   }
 
   function handleKeyDown(e: React.KeyboardEvent) {
-    if (e.key === 'Enter') tab === 'login' ? doLogin() : doSignUp()
+    if (e.key !== 'Enter') return
+    if (tab === 'login') doLogin()
+    else doSignUp()
   }
 
   return (

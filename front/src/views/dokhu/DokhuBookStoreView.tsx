@@ -28,6 +28,7 @@ function BookDetailSheet({
   added: boolean
 }) {
   const { c } = useTheme()
+  const navigate = useNavigate()
   const spineColor = SPINE_COLORS[book.id % SPINE_COLORS.length]
 
   return (
@@ -123,6 +124,13 @@ function BookDetailSheet({
                 내 서재에 추가
               </>
             )}
+          </button>
+          <button
+            onClick={() => navigate(`/dokhu/books/${book.id}`)}
+            className="px-5 py-3 rounded-xl text-sm font-semibold transition-colors"
+            style={{ background: c.card, border: `1px solid ${c.border}`, color: c.textSub }}
+          >
+            상세페이지
           </button>
           <button
             onClick={onClose}

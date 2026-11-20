@@ -1,13 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Outlet, useNavigate, useLocation } from 'react-router-dom'
-import { container } from 'tsyringe'
-import AccountRepository from '@/repository/AccountRepository'
-import ProfileRepository from '@/repository/ProfileRepository'
-import type UserProfile from '@/entity/user/UserProfile'
 import { ThemeProvider, useTheme } from '@/context/ThemeContext'
-
-const USER_REPO = container.resolve(AccountRepository)
-const PROFILE_REPO = container.resolve(ProfileRepository)
+import useProfile from '@/hooks/useProfile'
 
 const SIDEBAR_W = 110
 
@@ -45,14 +39,8 @@ function NavItem({ icon, label, active, badge, onClick }: {
 function DokhuLayoutInner() {
   const navigate = useNavigate()
   const location = useLocation()
-  const [profile, setProfile] = useState<UserProfile | null>(null)
+  const profile = useProfile()
   const { c, isDark, toggle } = useTheme()
-
-  useEffect(() => {
-    USER_REPO.getProfile()
-      .then(p => { PROFILE_REPO.setProfile(p); setProfile(p) })
-      .catch(() => {})
-  }, [])
 
   const path = location.pathname
 
@@ -77,6 +65,11 @@ function DokhuLayoutInner() {
           <NavItem label="홈" active={path === '/dokhu'} onClick={() => navigate('/dokhu')}
             icon={<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>}
           />
+          {profile && (
+            <NavItem label="대시보드" active={path === '/dokhu/dashboard'} onClick={() => navigate('/dokhu/dashboard')}
+              icon={<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>}
+            />
+          )}
           <NavItem label="서재" active={path.startsWith('/dokhu/library') || path.startsWith('/dokhu/book')} onClick={() => navigate('/dokhu/library')}
             icon={<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>}
           />

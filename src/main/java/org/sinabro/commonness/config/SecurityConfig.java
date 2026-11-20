@@ -64,6 +64,7 @@ public class SecurityConfig {
                                 .requestMatchers("/dokhu/books", "/dokhu/books/**").permitAll()
                                 .requestMatchers("/dokhu/**").authenticated()
                                 .requestMatchers("/manager/**").hasAnyRole("ADMIN", "MANAGER")
+                                .requestMatchers("/admin/market/refresh").authenticated()
                                 .requestMatchers("/admin/**").hasAnyRole("ADMIN")
                                 .anyRequest().permitAll()
                 ).formLogin(formLogin -> {

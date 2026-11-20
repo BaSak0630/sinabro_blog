@@ -37,8 +37,6 @@ public class LocalAccount extends Account {
             throw new ValidationException(AccountMessage.PASSWORD_MIN_LENGTH_MSG);
         }
         if (password.length() > AccountConstant.PASSWORD_MAX_LENGTH) {
-            System.out.println(password);
-            System.out.println(password.length());
             throw new ValidationException(AccountMessage.PASSWORD_MAX_LENGTH_MSG);
         }
         //TODO 특수문자 공백 등등 추개검증 필요

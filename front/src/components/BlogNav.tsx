@@ -1,28 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { container } from 'tsyringe'
-import type UserProfile from '@/entity/user/UserProfile'
-import type HttpError from '@/http/HttpError'
-import AccountRepository from '@/repository/AccountRepository'
 import ProfileRepository from '@/repository/ProfileRepository'
+import useProfile from '@/hooks/useProfile'
 
-const USER_REPOSITORY = container.resolve(AccountRepository)
 const PROFILE_REPOSITORY = container.resolve(ProfileRepository)
 
 export default function BlogNav() {
   const navigate = useNavigate()
-  const [profile, setProfile] = useState<UserProfile | null>(null)
-
-  useEffect(() => {
-    USER_REPOSITORY.getProfile()
-      .then((p) => {
-        PROFILE_REPOSITORY.setProfile(p)
-        setProfile(p)
-      })
-      .catch((e: HttpError) => {
-        if (e.getCode() !== '401') console.error(e.getMessage())
-      })
-  }, [])
+  const profile = useProfile()
 
   function logout() {
     PROFILE_REPOSITORY.clear()

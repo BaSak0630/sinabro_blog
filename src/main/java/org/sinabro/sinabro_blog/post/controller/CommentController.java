@@ -15,12 +15,12 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("/posts/{postId}/comments")
-    private void write(@PathVariable Long postId, @RequestBody @Valid CommentCreate request){
+    public void write(@PathVariable Long postId, @RequestBody @Valid CommentCreate request){
         commentService.write(postId, request);
     }
 
     @PostMapping("/comments/{commentId}/delete")//delete requestBody 를 못넣는다
-    private void delete(@PathVariable Long commentId, @RequestBody @Valid CommentDelete request) {
+    public void delete(@PathVariable Long commentId, @RequestBody @Valid CommentDelete request) {
         commentService.delete(commentId, request);
     }
 }

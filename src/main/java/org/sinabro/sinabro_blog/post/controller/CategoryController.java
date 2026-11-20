@@ -11,7 +11,7 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-public class CategoryController {
+public class CategoryController{
 
     private final CategoryRepository categoryRepository;
 

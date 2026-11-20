@@ -6,7 +6,7 @@ import AdminRepository from '@/repository/AdminRepository'
 
 const ADMIN_REPOSITORY = container.resolve(AdminRepository)
 
-const ROLES = ['USER', 'MANAGER', 'ROLE_ADMIN']
+const ROLES = ['USER', 'MANAGER', 'ADMIN']
 
 export default function AdminUsersView() {
   const [userList, setUserList] = useState<Paging<AdminUser>>(new Paging<AdminUser>())

@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { container } from 'tsyringe'
 import type SkillNode from '@/entity/fintree/SkillNode'
-import type { NodeStatus, Difficulty } from '@/entity/fintree/SkillNode'
+import type { Difficulty } from '@/entity/fintree/SkillNode'
 import type UserProfile from '@/entity/user/UserProfile'
 import SkillTreeRepository from '@/repository/SkillTreeRepository'
 import AccountRepository from '@/repository/AccountRepository'
@@ -54,7 +54,6 @@ function computeBranchMap(
   depths: Map<number, number>,
 ): Map<number, number | null> {
   const branchDepth = 3 // FinTree 구조에서 7개 분기가 시작되는 깊이
-  const nodeMap = new Map(nodes.map(n => [n.id, n]))
 
   // depth == branchDepth 인 노드들 → 분기 루트, orderIndex 순 정렬
   const branchRoots = nodes

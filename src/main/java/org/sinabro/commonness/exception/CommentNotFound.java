@@ -2,7 +2,7 @@ package org.sinabro.commonness.exception;
 
 public class CommentNotFound extends SinabroException {
 
-    private static final String MESSAGE = "존재하지 않는 글입니다.";
+    private static final String MESSAGE = "존재하지 않는 댓글입니다.";
 
     public CommentNotFound() {
         super("[ERROR] " + MESSAGE);

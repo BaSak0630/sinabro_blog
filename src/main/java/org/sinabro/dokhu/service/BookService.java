@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.sinabro.commonness.admin.response.AdminPageResponse;
 import org.sinabro.dokhu.domain.Book;
+import org.sinabro.dokhu.repository.BookMapper;
 import org.sinabro.dokhu.repository.BookRepository;
 import org.sinabro.dokhu.request.BookRegisterRequest;
 import org.sinabro.dokhu.response.BookResponse;
@@ -18,6 +19,7 @@ import java.util.List;
 public class BookService {
 
     private final BookRepository bookRepository;
+    private final BookMapper bookMapper;
 
     public List<BookResponse> getBooks(String keyword, String genre, int size) {
         String kw = (keyword == null || keyword.isBlank()) ? null : keyword.trim();
@@ -26,9 +28,12 @@ public class BookService {
                 .stream().map(BookResponse::new).toList();
     }
 
+    // 책 상세 조회는 마이바티스로 처리
     public BookResponse getBook(Long bookId) {
-        Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new RuntimeException("책을 찾을 수 없습니다."));
+        Book book = bookMapper.findById(bookId);
+        if (book == null) {
+            throw new RuntimeException("책을 찾을 수 없습니다.");
+        }
         return new BookResponse(book);
     }
 

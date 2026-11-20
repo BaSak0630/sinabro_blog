@@ -61,7 +61,7 @@ function Bar({ label, value, max, color, c }: { label: string; value: number; ma
 }
 
 export default function DokhuStatsView() {
-  const { c, isDark } = useTheme()
+  const { c } = useTheme()
   const [library, setLibrary] = useState<UserBook[]>([])
   const [loading, setLoading] = useState(true)
 

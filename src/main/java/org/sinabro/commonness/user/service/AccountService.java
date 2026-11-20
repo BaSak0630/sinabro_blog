@@ -38,7 +38,7 @@ public class AccountService {
 
     public Optional<Account> findByUsername(String username) {
         Optional<LocalAccount> local = localAccountRepository.findByAccountId(username);
-        if (local.isPresent()) return local.map(a -> a);
+        if (local.isPresent()) return local.map(a -> (Account) a);
         return Optional.empty();
     }
 
@@ -49,14 +49,14 @@ public class AccountService {
 
     public Optional<Account> findByEmail(String email) {
         Optional<LocalAccount> local = localAccountRepository.findByEmail(email);
-        if (local.isPresent()) return local.map(a -> a);
-        return oAuthAccountRepository.findByEmail(email).map(a -> a);
+        if (local.isPresent()) return local.map(a -> (Account) a);
+        return oAuthAccountRepository.findByEmail(email).map(a -> (Account) a);
     }
 
     public Optional<Account> findByAccountId(@NotBlank(message = "아이디 입력해주세요") String accountId) {
         Optional<LocalAccount> local = localAccountRepository.findByAccountId(accountId);
-        if (local.isPresent()) return local.map(a -> a);
-        return oAuthAccountRepository.findByAccountId(accountId).map(a -> a);
+        if (local.isPresent()) return local.map(a -> (Account) a);
+        return oAuthAccountRepository.findByAccountId(accountId).map(a -> (Account) a);
     }
 
     public void join(LocalAccount accountEntity) {

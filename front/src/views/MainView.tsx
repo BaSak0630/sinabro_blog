@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { container } from 'tsyringe'
-import type UserProfile from '@/entity/user/UserProfile'
-import AccountRepository from '@/repository/AccountRepository'
 import ProfileRepository from '@/repository/ProfileRepository'
+import useProfile from '@/hooks/useProfile'
 
-const USER_REPOSITORY = container.resolve(AccountRepository)
 const PROFILE_REPOSITORY = container.resolve(ProfileRepository)
 
 interface ServiceCard {
@@ -46,15 +44,7 @@ const SERVICES: ServiceCard[] = [
 
 export default function MainView() {
   const navigate = useNavigate()
-  const [profile, setProfile] = useState<UserProfile | null>(null)
-  useEffect(() => {
-    USER_REPOSITORY.getProfile()
-      .then((p) => {
-        PROFILE_REPOSITORY.setProfile(p)
-        setProfile(p)
-      })
-      .catch(() => {/* 비로그인 상태 */})
-  }, [])
+  const profile = useProfile()
 
   function logout() {
     PROFILE_REPOSITORY.clear()

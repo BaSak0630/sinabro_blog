@@ -1,5 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { container } from 'tsyringe'
+import AdminRepository from '@/repository/AdminRepository'
+import useProfile from '@/hooks/useProfile'
+
+const ADMIN_REPOSITORY = container.resolve(AdminRepository)
 
 interface Indicator {
   symbol: string
@@ -30,12 +35,10 @@ interface CardState {
 }
 
 const INDICATORS: Indicator[] = [
-  { symbol: '^KS11',         label: '코스피',         unit: 'pt', flag: '🇰🇷', decimals: 2 },
-  { symbol: '^GSPC',         label: 'S&P 500',       unit: 'pt', flag: '🇺🇸', decimals: 2 },
-  { symbol: 'KRW=X',         label: '달러 / 원',      unit: '₩',  flag: '💱',  decimals: 2 },
-  { symbol: '^VIX',          label: '공포지수 (VIX)', unit: '',   flag: '😨',  decimals: 2 },
-  { symbol: '^TNX',          label: '미국 10년 국채', unit: '%',  flag: '📈',  decimals: 3 },
-  { symbol: '^IRJPY10YT=RR', label: '일본 10년 국채', unit: '%',  flag: '🇯🇵', decimals: 3 },
+  { symbol: 'SPY',    label: 'S&P 500 (SPY)', unit: '$', flag: '🇺🇸', decimals: 2 },
+  { symbol: 'USDKRW', label: '달러 / 원',       unit: '₩', flag: '💱',  decimals: 2 },
+  { symbol: 'UST10Y', label: '미국 10년 국채',  unit: '%', flag: '📈',  decimals: 3 },
+  { symbol: 'FEDFUNDS', label: '미국 기준금리', unit: '%', flag: '🏦', decimals: 2 },
 ]
 
 function formatPrice(val: number, unit: string, decimals: number): string {
@@ -119,6 +122,7 @@ function MarketCard({ card }: { card: CardState }) {
 
 export default function FinTreeLandingView() {
   const navigate = useNavigate()
+  const profile = useProfile()
 
   const [cards, setCards] = useState<CardState[]>(
     INDICATORS.map(ind => ({
@@ -130,6 +134,7 @@ export default function FinTreeLandingView() {
   )
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
   const [fetching, setFetching]       = useState(false)
+  const [refreshingApi, setRefreshingApi] = useState(false)
 
   const fetchMarketData = useCallback(async () => {
     setFetching(true)
@@ -143,7 +148,7 @@ export default function FinTreeLandingView() {
         INDICATORS.map(ind => {
           const r = list.find(q => q.symbol === ind.symbol)
           return {
-            indicator,
+            indicator: ind,
             price:         r?.price         ?? null,
             change:        r?.change        ?? null,
             changePercent: r?.changePercent ?? null,
@@ -163,6 +168,20 @@ export default function FinTreeLandingView() {
   }, [])
 
   useEffect(() => { fetchMarketData() }, [fetchMarketData])
+
+  function refreshFromApi() {
+    setRefreshingApi(true)
+    ADMIN_REPOSITORY.refreshMarketData()
+      .then(results => {
+        const summary = results
+          .map(r => `${r.symbol}: ${r.success ? '성공' : `실패 - ${r.message}`}`)
+          .join('\n')
+        alert(summary)
+        return fetchMarketData()
+      })
+      .catch(() => alert('갱신 요청에 실패했습니다.'))
+      .finally(() => setRefreshingApi(false))
+  }
 
   return (
     <div className="flex flex-col gap-6">
@@ -196,14 +215,24 @@ export default function FinTreeLandingView() {
                 : '데이터 불러오는 중…'}
             </p>
           </div>
-          <button
-            onClick={fetchMarketData}
-            disabled={fetching}
-            className="text-xs text-slate-500 hover:text-emerald-600 disabled:opacity-40 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5"
-          >
-            <span className={fetching ? 'animate-spin inline-block' : ''}>↻</span>
-            새로고침
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={refreshFromApi}
+              disabled={refreshingApi}
+              className="text-xs text-amber-600 hover:text-amber-700 disabled:opacity-40 bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5"
+            >
+              <span className={refreshingApi ? 'animate-spin inline-block' : ''}>⟳</span>
+              API 갱신
+            </button>
+            <button
+              onClick={fetchMarketData}
+              disabled={fetching}
+              className="text-xs text-slate-500 hover:text-emerald-600 disabled:opacity-40 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5"
+            >
+              <span className={fetching ? 'animate-spin inline-block' : ''}>↻</span>
+              새로고침
+            </button>
+          </div>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">

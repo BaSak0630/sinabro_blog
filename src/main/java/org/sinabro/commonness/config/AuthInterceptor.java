@@ -9,7 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class AuthInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String accessToken = request.getParameter("accessToken");
+        String accessToken = request.getHeader("Authorization");
 
         if (accessToken != null) {
             return true;
