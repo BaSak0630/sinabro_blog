@@ -44,3 +44,6 @@ application.yml
 # node
 nodeenv-22
 ".gitignore"
+
+# Claude Code local settings (contains local permission history, may include secrets)
+.claude/settings.local.json
