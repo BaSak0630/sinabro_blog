@@ -36,14 +36,22 @@ out/
 ### VS Code ###
 .vscode/
 
+### macOS ###
+.DS_Store
 
-.yml/
-*.yml/
 application.yml
 
 # node
 nodeenv-22
-".gitignore"
+front/.vite/
+
+# runtime uploads
+uploads/
+
+# local-only docs (기획서, 블로그 원본 등) — asciidoc 소스만 추적
+src/docs/*
+!src/docs/asciidoc/
+src/docs/asciidoc/*.html
 
 # Claude Code local settings (contains local permission history, may include secrets)
 .claude/settings.local.json
