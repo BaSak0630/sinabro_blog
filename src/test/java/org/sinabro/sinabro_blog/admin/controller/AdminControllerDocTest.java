@@ -145,7 +145,7 @@ public class AdminControllerDocTest {
     @DisplayName("관리자 유저 권한 변경")
     public void updateRoleTest() throws Exception {
         // given - RoleUpdateRequest JSON
-        String json = "{\"role\": \"ROLE_ADMIN\"}";
+        String json = "{\"role\": \"ADMIN\"}";
 
         // expected
         mockMvc.perform(patch("/admin/users/{id}/role", testAccount.getId())
@@ -158,7 +158,7 @@ public class AdminControllerDocTest {
                                 parameterWithName("id").description("권한을 변경할 유저 ID")
                         ),
                         requestFields(
-                                fieldWithPath("role").description("변경할 권한 (USER, ROLE_ADMIN, MANAGER)")
+                                fieldWithPath("role").description("변경할 권한 (USER, ADMIN, MANAGER)")
                         )
                 ));
     }
