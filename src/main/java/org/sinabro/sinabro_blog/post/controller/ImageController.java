@@ -3,6 +3,7 @@ package org.sinabro.sinabro_blog.post.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,26 +13,35 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Slf4j
 @RestController
 public class ImageController {
 
+    private static final Set<String> ALLOWED_EXTENSIONS = Set.of(".png", ".jpg", ".jpeg", ".gif", ".webp");
+
     @Value("${upload.path:./uploads}")
     private String uploadPath;
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/upload/image")
     public ResponseEntity<Map<String, String>> uploadImage(@RequestParam("image") MultipartFile file) throws IOException {
         if (file.isEmpty()) {
-            return ResponseEntity.badRequest().body(Map.of("error", "빈 파일입니다."));
+            return ResponseEntity.badRequest().body(Map.of("message", "빈 파일입니다."));
         }
 
         String originalName = file.getOriginalFilename();
         String ext = originalName != null && originalName.contains(".")
-                ? originalName.substring(originalName.lastIndexOf('.'))
+                ? originalName.substring(originalName.lastIndexOf('.')).toLowerCase(Locale.ROOT)
                 : ".png";
+        // .html/.svg 등이 /uploads 로 그대로 서빙되면 저장형 XSS가 되므로 이미지 확장자만 허용
+        if (!ALLOWED_EXTENSIONS.contains(ext)) {
+            return ResponseEntity.badRequest().body(Map.of("message", "허용되지 않는 파일 형식입니다."));
+        }
         String filename = UUID.randomUUID() + ext;
 
         Path dir = Paths.get(uploadPath);

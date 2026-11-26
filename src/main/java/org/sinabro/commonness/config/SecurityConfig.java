@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.Customizer;
@@ -18,6 +19,7 @@ import org.sinabro.commonness.config.auth.oauth.PrincipalOauth2UserService;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
     @Autowired
     private PrincipalOauth2UserService principalOauth2UserService;
@@ -55,6 +57,11 @@ public class SecurityConfig {
                                 response.sendRedirect("/loginForm");
                             }
                         })
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                            response.setContentType("application/json;charset=UTF-8");
+                            response.getWriter().write("{\"message\":\"권한이 없습니다.\"}");
+                        })
                 )
                 .authorizeHttpRequests(
                         authorizeRequests -> authorizeRequests
@@ -64,7 +71,6 @@ public class SecurityConfig {
                                 .requestMatchers("/dokhu/books", "/dokhu/books/**").permitAll()
                                 .requestMatchers("/dokhu/**").authenticated()
                                 .requestMatchers("/manager/**").hasAnyRole("ADMIN", "MANAGER")
-                                .requestMatchers("/admin/market/refresh").authenticated()
                                 .requestMatchers("/admin/**").hasAnyRole("ADMIN")
                                 .anyRequest().permitAll()
                 ).formLogin(formLogin -> {

@@ -2,10 +2,10 @@ import React, { useEffect, useRef, useState } from 'react'
 import MDEditor from '@uiw/react-md-editor'
 import { useNavigate } from 'react-router-dom'
 import { container } from 'tsyringe'
-import axios from 'axios'
+import axios, { type AxiosError } from 'axios'
+import HttpError from '@/http/HttpError'
 import PostWrite from '@/entity/post/PostWrite'
 import type Category from '@/entity/post/Category'
-import type HttpError from '@/http/HttpError'
 import PostRepository from '@/repository/PostRepository'
 import CategoryRepository from '@/repository/CategoryRepository'
 
@@ -62,8 +62,8 @@ export default function WriteView() {
       const url = res.data.url
       const markdownImage = `\n![image](${url})\n`
       setPostWrite(prev => ({ ...prev, content: (prev.content ?? '') + markdownImage }))
-    } catch {
-      alert('이미지 업로드에 실패했습니다.')
+    } catch (e) {
+      alert(new HttpError(e as AxiosError).getMessage())
     } finally {
       setUploading(false)
     }

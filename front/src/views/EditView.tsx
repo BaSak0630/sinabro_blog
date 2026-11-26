@@ -2,11 +2,11 @@ import React, { useEffect, useRef, useState } from 'react'
 import MDEditor from '@uiw/react-md-editor'
 import { useNavigate, useParams } from 'react-router-dom'
 import { container } from 'tsyringe'
-import axios from 'axios'
+import axios, { type AxiosError } from 'axios'
+import HttpError from '@/http/HttpError'
 import Post from '@/entity/post/Post'
 import PostEdit from '@/entity/post/PostEdit'
 import type Category from '@/entity/post/Category'
-import type HttpError from '@/http/HttpError'
 import PostRepository from '@/repository/PostRepository'
 import CategoryRepository from '@/repository/CategoryRepository'
 
@@ -69,8 +69,8 @@ export default function EditView() {
       })
       const markdownImage = `\n![image](${res.data.url})\n`
       setPostEdit(prev => ({ ...prev, content: (prev.content ?? '') + markdownImage }))
-    } catch {
-      alert('이미지 업로드에 실패했습니다.')
+    } catch (e) {
+      alert(new HttpError(e as AxiosError).getMessage())
     } finally {
       setUploading(false)
     }

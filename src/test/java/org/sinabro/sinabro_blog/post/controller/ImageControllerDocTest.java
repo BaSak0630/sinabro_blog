@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -18,6 +19,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -30,6 +32,7 @@ public class ImageControllerDocTest {
     private MockMvc mockMvc;
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     @DisplayName("이미지 업로드")
     public void uploadImageTest() throws Exception {
         MockMultipartFile image = new MockMultipartFile(
@@ -50,5 +53,26 @@ public class ImageControllerDocTest {
                                 fieldWithPath("url").description("업로드된 이미지의 서버 접근 경로 (예: /uploads/uuid.png)")
                         )
                 ));
+    }
+
+    @Test
+    @WithMockUser(roles = "USER")
+    @DisplayName("관리자가 아니면 이미지 업로드 시 403과 권한 없음 메시지")
+    public void uploadImageForbiddenTest() throws Exception {
+        MockMultipartFile image = new MockMultipartFile("image", "test-image.png", "image/png", "x".getBytes());
+
+        mockMvc.perform(multipart("/upload/image").file(image))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.message").value("권한이 없습니다."));
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    @DisplayName("이미지가 아닌 확장자는 업로드 거부")
+    public void uploadNonImageRejectedTest() throws Exception {
+        MockMultipartFile html = new MockMultipartFile("image", "evil.html", "text/html", "<script></script>".getBytes());
+
+        mockMvc.perform(multipart("/upload/image").file(html))
+                .andExpect(status().isBadRequest());
     }
 }
