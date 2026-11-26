@@ -23,6 +23,7 @@ import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -110,5 +111,12 @@ class PostControllerTest {
         mockMvc.perform(delete("/posts/{postId}", 1L).with(authentication(auth)))
                 .andExpect(status().isForbidden())
                 .andExpect(jsonPath("$.message").value("권한이 없습니다."));
+    }
+
+    @Test
+    @DisplayName("페이지 파라미터 없이 글 목록 요청 시 기본값으로 조회")
+    void listWithoutPagingParams() throws Exception {
+        mockMvc.perform(get("/posts"))
+                .andExpect(status().isOk());
     }
 }
